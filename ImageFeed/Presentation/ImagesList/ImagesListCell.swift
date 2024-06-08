@@ -40,7 +40,7 @@ final class ImagesListCell: UITableViewCell {
         var button = UIButton()
         let image = UIImage(named: "HeartNoActive")
         button.setImage(image, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 42), forImageIn: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 44), forImageIn: .normal)
         
         return button
     }()
