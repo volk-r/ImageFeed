@@ -1,5 +1,5 @@
 //
-//  AppFontSettings.swift
+//  AppColorSettings.swift
 //  ImageFeed
 //
 //  Created by Roman Romanov on 06.06.2024.

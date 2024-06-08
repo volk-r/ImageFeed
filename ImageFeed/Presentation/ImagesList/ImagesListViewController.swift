@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  ImagesListViewController.swift
 //  ImageFeed
 //
 //  Created by Roman Romanov on 01.06.2024.
@@ -20,6 +20,8 @@ final class ImagesListViewController: UIViewController {
         
         imagesListView.tableView.dataSource = self
         imagesListView.tableView.delegate = self
+        
+        imagesListView.tableView.rowHeight = 200
     }
     
     // MARK: - SETUP
@@ -29,16 +31,33 @@ final class ImagesListViewController: UIViewController {
 
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        UITableViewCell()
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: ImagesListCell.reuseIdentifier,
+            for: indexPath
+        )
+        
+        guard let imageListCell = cell as? ImagesListCell else {
+            return UITableViewCell()
+        }
+        
+        configCell(for: imageListCell)
+        
+        return imageListCell
+    }
+    
+    func configCell(for cell: ImagesListCell) {
+        cell.setupCell()
     }
 }
 
 // MARK: UITableViewDelegate
 
 extension ImagesListViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
 }

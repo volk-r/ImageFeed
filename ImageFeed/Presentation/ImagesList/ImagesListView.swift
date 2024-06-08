@@ -14,7 +14,11 @@ final class ImagesListView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = AppColorSettings.backgroundColor
         tableView.separatorStyle = .none
-//        view.tableView.register(.self, forCellReuseIdentifier: .identifier)
+        
+        tableView.register(
+            ImagesListCell.self,
+            forCellReuseIdentifier: ImagesListCell.reuseIdentifier
+        )
         
         return tableView
     }()
