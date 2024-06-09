@@ -78,10 +78,10 @@ final class ImagesListCell: UITableViewCell {
             contentCellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
             contentCellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            postImageView.topAnchor.constraint(equalTo: contentCellView.topAnchor),
+            postImageView.topAnchor.constraint(equalTo: contentCellView.topAnchor, constant: inset / 4),
             postImageView.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor),
             postImageView.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor),
-            postImageView.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor),
+            postImageView.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor, constant: -inset / 4),
             
             likeButton.topAnchor.constraint(equalTo: postImageView.topAnchor),
             likeButton.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor),
@@ -102,9 +102,11 @@ extension ImagesListCell {
         likeButton.imageView?.image = UIImage(named: "HeartNoActive")
     }
     
-    func setupCell() {
-        postImageView.image = UIImage(named: "7")
-        descriptionLabel.text = "8 июня 2024"
-        likeButton.imageView?.image = UIImage(named: "HeartActive")
+    func setupCell(with cellData: ImagesListCellModel) {
+        postImageView.image = cellData.image
+        descriptionLabel.text = cellData.date
+        
+        let likeImageName = cellData.isLiked ? "HeartActive" : "HeartNoActive"
+        likeButton.imageView?.image = UIImage(named: likeImageName)
     }
 }

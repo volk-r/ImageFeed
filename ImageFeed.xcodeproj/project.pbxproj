@@ -11,6 +11,7 @@
 		3C35C3AF2C1217E9000BA1FE /* ImagesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */; };
 		3C35C3B22C121A81000BA1FE /* AppColorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3B12C121A81000BA1FE /* AppColorSettings.swift */; };
 		3C35C3B52C123132000BA1FE /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3B42C123132000BA1FE /* ImagesListCell.swift */; };
+		3C35C3B82C15E989000BA1FE /* ImagesListCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3B72C15E989000BA1FE /* ImagesListCellModel.swift */; };
 		3C8A63FF2C0B5CE000FC6E6C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A63FE2C0B5CE000FC6E6C /* AppDelegate.swift */; };
 		3C8A64012C0B5CE000FC6E6C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A64002C0B5CE000FC6E6C /* SceneDelegate.swift */; };
 		3C8A64032C0B5CE000FC6E6C /* ImagesListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C8A64022C0B5CE000FC6E6C /* ImagesListViewController.swift */; };
@@ -24,6 +25,7 @@
 		3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListView.swift; sourceTree = "<group>"; };
 		3C35C3B12C121A81000BA1FE /* AppColorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorSettings.swift; sourceTree = "<group>"; };
 		3C35C3B42C123132000BA1FE /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		3C35C3B72C15E989000BA1FE /* ImagesListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCellModel.swift; sourceTree = "<group>"; };
 		3C8A63FB2C0B5CE000FC6E6C /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C8A63FE2C0B5CE000FC6E6C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C8A64002C0B5CE000FC6E6C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,8 +76,17 @@
 				3C8A64022C0B5CE000FC6E6C /* ImagesListViewController.swift */,
 				3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */,
 				3C35C3B42C123132000BA1FE /* ImagesListCell.swift */,
+				3C35C3B62C15E970000BA1FE /* Models */,
 			);
 			path = ImagesList;
+			sourceTree = "<group>";
+		};
+		3C35C3B62C15E970000BA1FE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				3C35C3B72C15E989000BA1FE /* ImagesListCellModel.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		3C8A63F22C0B5CE000FC6E6C = {
@@ -195,6 +206,7 @@
 				3C8A64012C0B5CE000FC6E6C /* SceneDelegate.swift in Sources */,
 				3C35C3AB2C10E1D5000BA1FE /* UIColor+Extensions.swift in Sources */,
 				3C35C3B22C121A81000BA1FE /* AppColorSettings.swift in Sources */,
+				3C35C3B82C15E989000BA1FE /* ImagesListCellModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +276,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -321,7 +333,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -342,6 +354,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ImageFeed/SystemFiles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ImageFeed;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -374,6 +387,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ImageFeed/SystemFiles/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = ImageFeed;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
