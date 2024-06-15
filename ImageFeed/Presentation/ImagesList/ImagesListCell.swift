@@ -11,12 +11,6 @@ final class ImagesListCell: UITableViewCell {
     // MARK: - PROPERTIES
     static let reuseIdentifier = "ImagesListCell"
     
-    private let contentCellView: UIView = {
-        var view = UIView()
-        
-        return view
-    }()
-    
     private let postImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -61,7 +55,6 @@ final class ImagesListCell: UITableViewCell {
     // MARK: - SETUP LAYOUT
     private func setupLayout() {
         [
-            contentCellView,
             postImageView,
             descriptionLabel,
             likeButton,
@@ -73,15 +66,10 @@ final class ImagesListCell: UITableViewCell {
         let inset: CGFloat = 16
         
         NSLayoutConstraint.activate([
-            contentCellView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentCellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            contentCellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
-            contentCellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
-            postImageView.topAnchor.constraint(equalTo: contentCellView.topAnchor, constant: inset / 4),
-            postImageView.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor),
-            postImageView.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor),
-            postImageView.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor, constant: -inset / 4),
+            postImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
+            postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
+            postImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset / 4),
             
             likeButton.topAnchor.constraint(equalTo: postImageView.topAnchor),
             likeButton.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor),

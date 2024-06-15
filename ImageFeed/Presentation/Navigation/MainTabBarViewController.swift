@@ -18,19 +18,21 @@ final class MainTabBarViewController: UITabBarController {
         UITabBar.appearance().barTintColor = AppColorSettings.backgroundColor
         UITabBar.appearance().tintColor = .white
         
+        UINavigationBar.appearance().barTintColor = AppColorSettings.backgroundColor
+        UINavigationBar.appearance().tintColor = .white
+        
         setupControllers()
     }
     
     private func setupControllers() {
         let navigationControllerFeed = UINavigationController(rootViewController: ImagesListVC)
         let navigationControllerProfile = UINavigationController(rootViewController: profileVC)
-        navigationControllerFeed.navigationBar.isHidden = true
+        navigationControllerProfile.navigationBar.isHidden = true
         
-        ImagesListVC.tabBarItem.title = "Лента"
         ImagesListVC.tabBarItem.image = UIImage(named: "tab_editorial_active")
-        
-        profileVC.tabBarItem.title = "Профиль"
+        ImagesListVC.title = ""
         profileVC.tabBarItem.image = UIImage(named: "tab_profile_active")
+        profileVC.title = ""
         
         viewControllers = [navigationControllerFeed, navigationControllerProfile]
     }
