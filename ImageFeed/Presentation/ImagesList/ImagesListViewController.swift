@@ -54,8 +54,6 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         configCell(for: imageListCell, with: indexPath)
-        imageListCell.imagesListCellDelegate = self
-        imageListCell.setIndexPath(indexPath)
         
         return imageListCell
     }
@@ -74,6 +72,8 @@ extension ImagesListViewController: UITableViewDataSource {
         )
         
         cell.setupCell(with: cellData)
+        cell.imagesListCellDelegate = self
+        cell.setIndexPath(indexPath)
     }
 }
 
