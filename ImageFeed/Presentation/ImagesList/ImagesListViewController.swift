@@ -54,6 +54,8 @@ extension ImagesListViewController: UITableViewDataSource {
         }
         
         configCell(for: imageListCell, with: indexPath)
+        imageListCell.imagesListCellDelegate = self
+        imageListCell.setIndexPath(indexPath)
         
         return imageListCell
     }
@@ -93,5 +95,15 @@ extension ImagesListViewController: UITableViewDelegate {
         let cellHeight = image.size.height * scale
         
         return cellHeight
+    }
+}
+
+// MARK: ImagesListCellDelegate
+
+extension ImagesListViewController: ImagesListCellDelegate {
+    func openImage(indexPath: IndexPath) {
+        let imageName = photosName[indexPath.row]
+        let singleImageVC = SingleImageViewController(model: SingleImageModel(image: imageName))
+        show(singleImageVC, sender: self)
     }
 }

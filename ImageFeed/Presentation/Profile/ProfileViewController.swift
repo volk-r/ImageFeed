@@ -8,7 +8,7 @@
 import UIKit
 
 final class ProfileViewController: UIViewController {
-    // MARK: PROPERTIE
+    // MARK: PROPERTIES
     private let profileView = ProfileView()
     
     // MARK: - Lifecycle

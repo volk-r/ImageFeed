@@ -11,6 +11,10 @@ final class ImagesListCell: UITableViewCell {
     // MARK: - PROPERTIES
     static let reuseIdentifier = "ImagesListCell"
     
+    weak var imagesListCellDelegate: ImagesListCellDelegate?
+       
+    private var indexPathCell = IndexPath()
+    
     private let postImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
@@ -46,6 +50,7 @@ final class ImagesListCell: UITableViewCell {
         selectionStyle = .none
         
         setupLayout()
+        addGesture()
     }
     
     required init?(coder: NSCoder) {
@@ -96,5 +101,18 @@ extension ImagesListCell {
         
         let likeImageName = cellData.isLiked ? "HeartActive" : "HeartNoActive"
         likeButton.imageView?.image = UIImage(named: likeImageName)
+    }
+    
+    func setIndexPath(_ indexPath: IndexPath) {
+        indexPathCell = indexPath
+    }
+    
+    private func addGesture() {
+        let postImageViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(postImageViewOpened))
+        postImageView.addGestureRecognizer(postImageViewTapGesture)
+    }
+    
+    @objc private func postImageViewOpened() {
+        imagesListCellDelegate?.openImage(indexPath: indexPathCell)
     }
 }
