@@ -98,6 +98,7 @@
 				3C8A64022C0B5CE000FC6E6C /* ImagesListViewController.swift */,
 				3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */,
 				3C35C3B42C123132000BA1FE /* ImagesListCell.swift */,
+				3C35C3D22C1F6581000BA1FE /* ImagesListCellDelegate.swift */,
 				3C35C3B62C15E970000BA1FE /* Models */,
 			);
 			path = ImagesList;
@@ -107,7 +108,6 @@
 			isa = PBXGroup;
 			children = (
 				3C35C3B72C15E989000BA1FE /* ImagesListCellModel.swift */,
-				3C35C3D22C1F6581000BA1FE /* ImagesListCellDelegate.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

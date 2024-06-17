@@ -13,11 +13,19 @@ final class SingleImageView: UIView {
     
     private let imageView: UIImageView = {
         var imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
         
         return imageView
+    }()
+    
+    let backButton: UIButton = {
+        var button = UIButton()
+        let image = UIImage(named: "Backward")
+        button.setImage(image, for: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 44), forImageIn: .normal)
+        
+        return button
     }()
     
     // MARK: INIT
@@ -36,13 +44,22 @@ final class SingleImageView: UIView {
     
     // MARK: - SETUP LAYOUT
     private func setupLayout() {
-        addSubview(imageView)
+        [
+            imageView,
+            backButton,
+        ].forEach{
+            $0.translatesAutoresizingMaskIntoConstraints = false
+            addSubview($0)
+        }
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
             imageView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
+            
+            backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 9),
+            backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 9),
         ])
     }
     

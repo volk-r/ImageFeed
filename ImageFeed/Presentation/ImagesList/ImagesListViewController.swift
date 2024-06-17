@@ -104,6 +104,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
     func openImage(indexPath: IndexPath) {
         let imageName = photosName[indexPath.row]
         let singleImageVC = SingleImageViewController(model: SingleImageModel(image: imageName))
-        show(singleImageVC, sender: self)
+        singleImageVC.modalPresentationStyle = .fullScreen
+        present(singleImageVC, animated: true)
     }
 }
