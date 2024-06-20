@@ -37,6 +37,14 @@ final class SingleImageView: UIView {
         return button
     }()
     
+    let shareButton: UIButton = {
+        var button = UIButton()
+        let image = UIImage(named: "Sharing")
+        button.setImage(image, for: .normal)
+        
+        return button
+    }()
+    
     // MARK: INIT
     init(model: SingleImageModel) {
         singleImageViewModel = model
@@ -56,6 +64,7 @@ final class SingleImageView: UIView {
         [
             imageView,
             backButton,
+            shareButton,
         ].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             scrollView.addSubview($0)
@@ -80,6 +89,11 @@ final class SingleImageView: UIView {
             
             backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 9),
             backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 9),
+            
+            shareButton.widthAnchor.constraint(equalToConstant: 50),
+            shareButton.heightAnchor.constraint(equalToConstant: 50),
+            shareButton.centerXAnchor.constraint(equalTo: centerXAnchor),
+            shareButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 9),
         ])
     }
     

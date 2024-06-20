@@ -30,11 +30,31 @@ final class SingleImageViewController: UIViewController {
 
 extension SingleImageViewController {
     private func setupButton() {
-        singleImageView?.backButton.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        singleImageView?.backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        
+        singleImageView?.shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
     }
     
-    @objc func backButtonPressed() {
+    @objc func didTapBackButton() {
         dismiss(animated: true)
+    }
+    
+    @objc func didTapShareButton() {
+        guard 
+            let singleImageView,
+            let image = singleImageView.imageView.image
+        else {
+            return
+        }
+        
+        let shareText = "This is my favorite image"
+        let shareContent: [Any] = [shareText, image]
+        let activityController = UIActivityViewController(
+            activityItems: shareContent,
+            applicationActivities: nil
+        )
+        
+        self.present(activityController, animated: true, completion: nil)
     }
 }
 
