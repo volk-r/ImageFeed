@@ -93,7 +93,7 @@ final class SingleImageView: UIView {
             shareButton.widthAnchor.constraint(equalToConstant: 50),
             shareButton.heightAnchor.constraint(equalToConstant: 50),
             shareButton.centerXAnchor.constraint(equalTo: centerXAnchor),
-            shareButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: 9),
+            shareButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
         ])
     }
     
