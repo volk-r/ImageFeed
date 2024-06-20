@@ -11,9 +11,18 @@ final class SingleImageView: UIView {
     // MARK: PROPERTIES
     private var singleImageViewModel: SingleImageModel
     
-    private let imageView: UIImageView = {
+    lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
+        
+        return scrollView
+    }()
+    
+    let imageView: UIImageView = {
         var imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
         
         return imageView
@@ -49,14 +58,25 @@ final class SingleImageView: UIView {
             backButton,
         ].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
-            addSubview($0)
+            scrollView.addSubview($0)
         }
         
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(scrollView)
+        
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            scrollView.topAnchor.constraint(equalTo: topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+
+            imageView.centerXAnchor.constraint(equalTo: centerXAnchor),
+            imageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             
             backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 9),
             backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 9),
