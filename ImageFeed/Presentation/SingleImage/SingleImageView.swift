@@ -11,10 +11,10 @@ final class SingleImageView: UIView {
     // MARK: PROPERTIES
     private var singleImageViewModel: SingleImageModel
     
-    var imageViewBottomConstraint: NSLayoutConstraint!
-    var imageViewLeadingConstraint: NSLayoutConstraint!
-    var imageViewTopConstraint: NSLayoutConstraint!
-    var imageViewTrailingConstraint: NSLayoutConstraint!
+    private var imageViewBottomConstraint: NSLayoutConstraint!
+    private var imageViewLeadingConstraint: NSLayoutConstraint!
+    private var imageViewTopConstraint: NSLayoutConstraint!
+    private var imageViewTrailingConstraint: NSLayoutConstraint!
     
     lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -25,7 +25,7 @@ final class SingleImageView: UIView {
         return scrollView
     }()
     
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.isUserInteractionEnabled = true
@@ -112,5 +112,32 @@ final class SingleImageView: UIView {
     // MARK: - SETUP DATA
     private func setupContent() {
         imageView.image = UIImage(named: singleImageViewModel.image)
+    }
+}
+
+// MARK: - FUNCTIONS
+extension SingleImageView {
+    func updateConstraintsForView(_ view: UIView) {
+        let size = view.bounds.size
+        let yOffset = max(0, (size.height - imageView.frame.height) / 2)
+        imageViewTopConstraint.constant = yOffset
+        imageViewBottomConstraint.constant = yOffset
+        
+        let xOffset = max(0, (size.width - imageView.frame.width) / 2)
+        imageViewLeadingConstraint.constant = xOffset
+        imageViewTrailingConstraint.constant = xOffset
+        
+        view.layoutIfNeeded()
+    }
+    
+    func getImageForSingleImageView() -> UIImageView {
+        imageView
+    }
+    
+    func getContentForSharing() -> [Any] {
+        guard let image = imageView.image else { return [] }
+        
+        let shareText = "This is my favorite image"
+        return [shareText, image]
     }
 }

@@ -40,15 +40,8 @@ extension SingleImageViewController {
     }
     
     @objc func didTapShareButton() {
-        guard
-            let singleImageView,
-            let image = singleImageView.imageView.image
-        else {
-            return
-        }
+        guard let shareContent: [Any] = singleImageView?.getContentForSharing() else { return }
         
-        let shareText = "This is my favorite image"
-        let shareContent: [Any] = [shareText, image]
         let activityController = UIActivityViewController(
             activityItems: shareContent,
             applicationActivities: nil
@@ -56,43 +49,16 @@ extension SingleImageViewController {
         
         self.present(activityController, animated: true, completion: nil)
     }
-    
-    // MARK: OTHER FUNCTIONS
-    func updateMinZoomScaleForSize(_ size: CGSize) {
-        guard let singleImageView else { return }
-        
-        let widthScale = size.width / singleImageView.imageView.bounds.width
-        let heightScale = size.height / singleImageView.imageView.bounds.height
-        let minScale = min(widthScale, heightScale)
-        
-        singleImageView.scrollView.minimumZoomScale = minScale
-        singleImageView.scrollView.zoomScale = minScale
-    }
 }
 
 // MARK: UIScrollViewDelegate
 
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return singleImageView?.imageView
+        singleImageView?.getImageForSingleImageView()
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        updateConstraintsForSize(view.bounds.size)
+        singleImageView?.updateConstraintsForView(view)
     }
-    
-    func updateConstraintsForSize(_ size: CGSize) {
-        guard let singleImageView else { return }
-        
-        let yOffset = max(0, (size.height - singleImageView.imageView.frame.height) / 2)
-        singleImageView.imageViewTopConstraint.constant = yOffset
-        singleImageView.imageViewBottomConstraint.constant = yOffset
-        
-        let xOffset = max(0, (size.width - singleImageView.imageView.frame.width) / 2)
-        singleImageView.imageViewLeadingConstraint.constant = xOffset
-        singleImageView.imageViewTrailingConstraint.constant = xOffset
-        
-        view.layoutIfNeeded()
-    }
-    
 }
