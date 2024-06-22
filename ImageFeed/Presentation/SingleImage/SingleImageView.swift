@@ -20,7 +20,7 @@ final class SingleImageView: UIView {
         let scrollView = UIScrollView()
         scrollView.contentInsetAdjustmentBehavior = .never
         scrollView.minimumZoomScale = 0.2
-        scrollView.maximumZoomScale = 1.25
+        scrollView.maximumZoomScale = 5.0
         
         return scrollView
     }()
@@ -86,15 +86,18 @@ final class SingleImageView: UIView {
         ])
         
         imageViewTopConstraint = imageView.topAnchor.constraint(equalTo: scrollView.topAnchor)
-        imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: leadingAnchor)
-        imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: trailingAnchor)
-        imageViewBottomConstraint = imageView.bottomAnchor.constraint(equalTo: bottomAnchor)
+        imageViewLeadingConstraint = imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor)
+        imageViewTrailingConstraint = imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+        imageViewBottomConstraint = imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         
         NSLayoutConstraint.activate([
             imageViewTopConstraint,
             imageViewLeadingConstraint,
             imageViewTrailingConstraint,
             imageViewBottomConstraint,
+            
+            imageView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor),
+            imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
             
             backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 9),
             backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 9),
