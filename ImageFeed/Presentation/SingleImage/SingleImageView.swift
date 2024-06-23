@@ -27,7 +27,7 @@ final class SingleImageView: UIView {
     
     private let imageView: UIImageView = {
         var imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
+        imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
         
         return imageView
