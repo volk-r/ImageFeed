@@ -58,9 +58,10 @@ final class ProfileView: UIView {
     
     private let exitButton: UIButton = {
         var button = UIButton()
-        let image = UIImage(named: "Exit")
+        let image = UIImage(systemName: "ipad.and.arrow.forward")
+        button.imageView?.tintColor = UIColor(hexString: "E47370")
         button.setImage(image, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 44), forImageIn: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
         return button
     }()

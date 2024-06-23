@@ -35,9 +35,10 @@ final class SingleImageView: UIView {
     
     let backButton: UIButton = {
         var button = UIButton()
-        let image = UIImage(named: "Backward")
+        let image = UIImage(systemName: "chevron.backward")
+        button.imageView?.tintColor = .white
         button.setImage(image, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 44), forImageIn: .normal)
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
         return button
     }()
@@ -100,7 +101,7 @@ final class SingleImageView: UIView {
             imageView.heightAnchor.constraint(lessThanOrEqualTo: heightAnchor),
             
             backButton.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 9),
-            backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 9),
+            backButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             
             shareButton.widthAnchor.constraint(equalToConstant: 50),
             shareButton.heightAnchor.constraint(equalToConstant: 50),

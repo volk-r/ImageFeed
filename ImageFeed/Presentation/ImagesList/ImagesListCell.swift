@@ -36,9 +36,11 @@ final class ImagesListCell: UITableViewCell {
     
     private let likeButton: UIButton = {
         var button = UIButton()
-        let image = UIImage(named: "HeartNoActive")
+        let image = UIImage(systemName: "suit.heart.fill")
         button.setImage(image, for: .normal)
-        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 44), forImageIn: .normal)
+        button.imageView?.tintColor = .white
+        button.alpha = 0.5
+        button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
         return button
     }()
@@ -76,8 +78,8 @@ final class ImagesListCell: UITableViewCell {
             postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
             postImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset / 4),
             
-            likeButton.topAnchor.constraint(equalTo: postImageView.topAnchor),
-            likeButton.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor),
+            likeButton.topAnchor.constraint(equalTo: postImageView.topAnchor, constant: 12),
+            likeButton.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor, constant: -10.5),
             
             descriptionLabel.leadingAnchor.constraint(equalTo: postImageView.leadingAnchor, constant: inset / 2),
             descriptionLabel.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor, constant: -inset),
@@ -92,15 +94,17 @@ extension ImagesListCell {
         super.prepareForReuse()
         postImageView.image = nil
         descriptionLabel.text = ""
-        likeButton.imageView?.image = UIImage(named: "HeartNoActive")
+        likeButton.imageView?.tintColor = .white
+        likeButton.alpha = 0.5
     }
     
     func setupCell(with cellData: ImagesListCellModel) {
         postImageView.image = cellData.image
         descriptionLabel.text = cellData.date
-        
-        let likeImageName = cellData.isLiked ? "HeartActive" : "HeartNoActive"
-        likeButton.imageView?.image = UIImage(named: likeImageName)
+        likeButton.imageView?.tintColor = cellData.isLiked
+            ? UIColor(hexString: "F56B6C")
+            : .white
+        likeButton.alpha = cellData.isLiked ? 1 : 0.5
     }
     
     func setIndexPath(_ indexPath: IndexPath) {
