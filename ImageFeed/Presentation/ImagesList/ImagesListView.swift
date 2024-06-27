@@ -14,6 +14,7 @@ final class ImagesListView: UIView {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = AppColorSettings.backgroundColor
         tableView.separatorStyle = .none
+        tableView.contentInset = UIEdgeInsets(top: -25, left: 0, bottom: 0, right: 0)
         
         tableView.register(
             ImagesListCell.self,
