@@ -12,6 +12,8 @@ final class WebViewViewController: UIViewController, WKUIDelegate {
     // MARK: - PROPERTIES
     private lazy var webView = WebViewView()
     
+    weak var delegate: WebViewViewControllerDelegate?
+    
     // MARK: - Lifecycle
     override func loadView() {
         webView.wkWebView.uiDelegate = self
@@ -78,7 +80,7 @@ extension WebViewViewController {
     }
     
     @objc private func backItemAction() {
-        dismiss(animated: true)
+        delegate?.webViewViewControllerDidCancel(self)
     }
 }
 
@@ -89,8 +91,8 @@ extension WebViewViewController: WKNavigationDelegate {
         decidePolicyFor navigationAction: WKNavigationAction,
         decisionHandler: @escaping (WKNavigationActionPolicy) -> Void
     ) {
-        // TODO: process code
         if let code = code(from: navigationAction) {
+            delegate?.webViewViewController(self, didAuthenticateWithCode: code)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)

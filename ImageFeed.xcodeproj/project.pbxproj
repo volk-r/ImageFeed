@@ -32,6 +32,7 @@
 		3C8A64082C0B5CE100FC6E6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C8A64072C0B5CE100FC6E6C /* Assets.xcassets */; };
 		3C8A640B2C0B5CE100FC6E6C /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3C8A640A2C0B5CE100FC6E6C /* Base */; };
 		3C8A64132C0CFE5E00FC6E6C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C8A64092C0B5CE100FC6E6C /* LaunchScreen.storyboard */; };
+		3C95FC112C348CF2000F2256 /* WebViewViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C95FC102C348CF2000F2256 /* WebViewViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +62,7 @@
 		3C8A64072C0B5CE100FC6E6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C8A640A2C0B5CE100FC6E6C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3C8A640C2C0B5CE100FC6E6C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3C95FC102C348CF2000F2256 /* WebViewViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -175,6 +177,7 @@
 				3C6F32652C3323DE00CD930F /* AuthView.swift */,
 				3C6F32672C33305400CD930F /* WebViewViewController.swift */,
 				3C6F32692C34643300CD930F /* WebViewView.swift */,
+				3C95FC0F2C348CCB000F2256 /* Protocol */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -216,6 +219,14 @@
 				3C8A64072C0B5CE100FC6E6C /* Assets.xcassets */,
 			);
 			path = SystemFiles;
+			sourceTree = "<group>";
+		};
+		3C95FC0F2C348CCB000F2256 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				3C95FC102C348CF2000F2256 /* WebViewViewControllerDelegate.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -311,6 +322,7 @@
 				3C6F32642C33235000CD930F /* AuthViewController.swift in Sources */,
 				3C35C3B82C15E989000BA1FE /* ImagesListCellModel.swift in Sources */,
 				3C6F32612C3087BC00CD930F /* Constants.swift in Sources */,
+				3C95FC112C348CF2000F2256 /* WebViewViewControllerDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
