@@ -10,12 +10,19 @@ import WebKit
 
 final class WebViewView: UIView {
     // MARK: - PROPERTIES
-    var wkWebView: WKWebView = {
+    var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.backgroundColor = .white
         
         return webView
+    }()
+    
+    var progressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.tintColor = AppColorSettings.backgroundColor
+        
+        return progressView
     }()
     
     // MARK: INIT
@@ -33,17 +40,22 @@ final class WebViewView: UIView {
     // MARK: - SETUP LAYOUT
     private func setupLayout() {
         [
-            wkWebView,
+            webView,
+            progressView,
         ].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             addSubview($0)
         }
         
         NSLayoutConstraint.activate([
-            wkWebView.topAnchor.constraint(equalTo: topAnchor),
-            wkWebView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            wkWebView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            wkWebView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            webView.topAnchor.constraint(equalTo: topAnchor),
+            webView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            
+            progressView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            progressView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor),
+            progressView.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor),
         ])
     }
 }

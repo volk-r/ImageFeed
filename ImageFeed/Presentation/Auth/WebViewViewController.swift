@@ -10,15 +10,15 @@ import WebKit
 
 final class WebViewViewController: UIViewController, WKUIDelegate {
     // MARK: - PROPERTIES
-    private lazy var webView = WebViewView()
+    private lazy var webViewView = WebViewView()
     
     weak var delegate: WebViewViewControllerDelegate?
     
     // MARK: - Lifecycle
     override func loadView() {
-        webView.wkWebView.uiDelegate = self
-        webView.wkWebView.navigationDelegate = self
-        view = webView
+        webViewView.webView.uiDelegate = self
+        webViewView.webView.navigationDelegate = self
+        view = webViewView
         view.accessibilityIdentifier = "ShowWebView"
     }
     
@@ -33,12 +33,20 @@ final class WebViewViewController: UIViewController, WKUIDelegate {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         tabBarController?.tabBar.isHidden = true
+        
+        webViewView.webView.addObserver(
+            self,
+            forKeyPath: #keyPath(WKWebView.estimatedProgress),
+            options: .new,
+            context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
+        
+        webViewView.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
     }
 }
 
@@ -63,9 +71,10 @@ extension WebViewViewController {
         }
         
         let request = URLRequest(url: url)
-        webView.wkWebView.load(request)
+        webViewView.webView.load(request)
     }
     
+    // MARK: - setup BACK button
     private func configureBackButton() {
         let image = UIImage(systemName: "chevron.backward")
         navigationController?.navigationBar.backIndicatorImage = image
@@ -81,6 +90,25 @@ extension WebViewViewController {
     
     @objc private func backItemAction() {
         delegate?.webViewViewControllerDidCancel(self)
+    }
+    
+    // MARK: - UPDATE progressView
+    override func observeValue(
+        forKeyPath keyPath: String?,
+        of object: Any?,
+        change: [NSKeyValueChangeKey : Any]?,
+        context: UnsafeMutableRawPointer?
+    ) {
+        if keyPath == #keyPath(WKWebView.estimatedProgress) {
+            updateProgress()
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+
+    private func updateProgress() {
+        webViewView.progressView.progress = Float(webViewView.webView.estimatedProgress)
+        webViewView.progressView.isHidden = fabs(webViewView.webView.estimatedProgress - 1.0) <= 0.0001
     }
 }
 
