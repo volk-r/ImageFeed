@@ -10,6 +10,8 @@
 		3C204F9C2C396D5400404D3C /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9B2C396D5400404D3C /* OAuth2Service.swift */; };
 		3C204FA02C39A94F00404D3C /* URLSession+data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9F2C39A94F00404D3C /* URLSession+data.swift */; };
 		3C204FA22C39D9DD00404D3C /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */; };
+		3C204FA42C3AFE3D00404D3C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204FA32C3AFE3D00404D3C /* SplashViewController.swift */; };
+		3C204FA62C3B0FE500404D3C /* AuthViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204FA52C3B0FE500404D3C /* AuthViewControllerDelegate.swift */; };
 		3C35C3AB2C10E1D5000BA1FE /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */; };
 		3C35C3AF2C1217E9000BA1FE /* ImagesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */; };
 		3C35C3B22C121A81000BA1FE /* AppColorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3B12C121A81000BA1FE /* AppColorSettings.swift */; };
@@ -42,6 +44,8 @@
 		3C204F9B2C396D5400404D3C /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		3C204F9F2C39A94F00404D3C /* URLSession+data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift"; sourceTree = "<group>"; };
 		3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
+		3C204FA32C3AFE3D00404D3C /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		3C204FA52C3B0FE500404D3C /* AuthViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewControllerDelegate.swift; sourceTree = "<group>"; };
 		3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListView.swift; sourceTree = "<group>"; };
 		3C35C3B12C121A81000BA1FE /* AppColorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorSettings.swift; sourceTree = "<group>"; };
@@ -164,6 +168,7 @@
 			isa = PBXGroup;
 			children = (
 				3C35C3C52C1DE5FD000BA1FE /* MainTabBarViewController.swift */,
+				3C204FA32C3AFE3D00404D3C /* SplashViewController.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -242,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				3C95FC102C348CF2000F2256 /* WebViewViewControllerDelegate.swift */,
+				3C204FA52C3B0FE500404D3C /* AuthViewControllerDelegate.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -320,6 +326,7 @@
 				3C35C3D12C1F5692000BA1FE /* SingleImageView.swift in Sources */,
 				3C35C3AF2C1217E9000BA1FE /* ImagesListView.swift in Sources */,
 				3C204F9C2C396D5400404D3C /* OAuth2Service.swift in Sources */,
+				3C204FA42C3AFE3D00404D3C /* SplashViewController.swift in Sources */,
 				3C204FA22C39D9DD00404D3C /* OAuth2TokenStorage.swift in Sources */,
 				3C8A64032C0B5CE000FC6E6C /* ImagesListViewController.swift in Sources */,
 				3C35C3BE2C1B6440000BA1FE /* ProfileView.swift in Sources */,
@@ -342,6 +349,7 @@
 				3C6F32642C33235000CD930F /* AuthViewController.swift in Sources */,
 				3C35C3B82C15E989000BA1FE /* ImagesListCellModel.swift in Sources */,
 				3C6F32612C3087BC00CD930F /* Constants.swift in Sources */,
+				3C204FA62C3B0FE500404D3C /* AuthViewControllerDelegate.swift in Sources */,
 				3C95FC112C348CF2000F2256 /* WebViewViewControllerDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

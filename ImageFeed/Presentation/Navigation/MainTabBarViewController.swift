@@ -8,9 +8,7 @@
 import UIKit
 
 final class MainTabBarViewController: UITabBarController {
-    // TODO:
-//    private let profileVC = ProfileViewController()
-    private let profileVC = AuthViewController()
+    private let profileVC = ProfileViewController()
     private let ImagesListVC = ImagesListViewController()
     
     override func viewDidLoad() {
