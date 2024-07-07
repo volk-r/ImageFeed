@@ -17,17 +17,15 @@ struct OAuthTokenResponseBody: Decodable {
 
 final class OAuth2Service {
     static let shared = OAuth2Service()
-    // MARK: - NetworkClient
-//    private let networkClient: NetworkRouting = NetworkClient()
     
     private init() {
         
     }
-    
-    func fetchOAuthToken(code: String, completion: Result<String, Error>) {
+
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         guard let request = makeOAuthTokenRequest(code: code) else {
             print(#file, #function, #line)
-            preconditionFailure("Unable to construct OAuth token request")
+            print("Unable to construct OAuth token request")
             return
         }
         
@@ -37,29 +35,15 @@ final class OAuth2Service {
                 do {
                     let decoder = JSONDecoder()
                     let oAuthTokenData = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    let accessToken = oAuthTokenData.accessToken
-                    
-                    let tokenStorage = OAuth2TokenStorage()
-                    tokenStorage.token = accessToken
-                    
-                    completion(.success(accessToken))
+                    completion(.success(oAuthTokenData.accessToken))
                 } catch {
+                    print("failed data decoding",#file, #function, #line)
                     completion(.failure(error))
                 }
             case .failure(let error):
                 completion(.failure(error))
             }
         }
-//        Task {
-//            do {
-//                let data = try await networkClient.fetchAsync(request: request)
-//                // TODO:
-//                let oAuthTokenData = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-//                completion(.success(oAuthTokenData.accessToken))
-//            } catch {
-//                print(error, #file, #function, #line)
-//            }
-//        }
     }
     
     func makeOAuthTokenRequest(code: String) -> URLRequest? {

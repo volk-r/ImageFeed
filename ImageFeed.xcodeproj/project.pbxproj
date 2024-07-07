@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3C204F9C2C396D5400404D3C /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9B2C396D5400404D3C /* OAuth2Service.swift */; };
-		3C204F9E2C39966F00404D3C /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9D2C39966F00404D3C /* NetworkClient.swift */; };
 		3C204FA02C39A94F00404D3C /* URLSession+data.swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9F2C39A94F00404D3C /* URLSession+data.swift.swift */; };
 		3C204FA22C39D9DD00404D3C /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */; };
 		3C35C3AB2C10E1D5000BA1FE /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */; };
@@ -41,7 +40,6 @@
 
 /* Begin PBXFileReference section */
 		3C204F9B2C396D5400404D3C /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
-		3C204F9D2C39966F00404D3C /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		3C204F9F2C39A94F00404D3C /* URLSession+data.swift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift.swift"; sourceTree = "<group>"; };
 		3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
@@ -88,7 +86,6 @@
 			isa = PBXGroup;
 			children = (
 				3C204F9B2C396D5400404D3C /* OAuth2Service.swift */,
-				3C204F9D2C39966F00404D3C /* NetworkClient.swift */,
 				3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */,
 			);
 			path = Services;
@@ -327,7 +324,6 @@
 				3C8A64032C0B5CE000FC6E6C /* ImagesListViewController.swift in Sources */,
 				3C35C3BE2C1B6440000BA1FE /* ProfileView.swift in Sources */,
 				3C35C3D32C1F6581000BA1FE /* ImagesListCellDelegate.swift in Sources */,
-				3C204F9E2C39966F00404D3C /* NetworkClient.swift in Sources */,
 				3C204FA02C39A94F00404D3C /* URLSession+data.swift.swift in Sources */,
 				3C35C3C32C1B7661000BA1FE /* ProfileModel.swift in Sources */,
 				3C6F32662C3323DE00CD930F /* AuthView.swift in Sources */,
