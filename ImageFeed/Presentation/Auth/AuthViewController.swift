@@ -9,7 +9,8 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     // MARK: PROPERTIES
-    let authView = AuthView()
+    private let authView = AuthView()
+    private let oauth2Service = OAuth2Service.shared
     
     // MARK: - Lifecycle
     
@@ -35,7 +36,7 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        // TODO: process code
+//        fetchOAuthToken(code: code, completion: Result<String, Error>)
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
