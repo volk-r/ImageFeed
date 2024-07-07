@@ -46,7 +46,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 tokenStorage.token = accessToken
             case .failure(let error):
                 print(error, #file, #function, #line)
-                preconditionFailure("Unable to get OAuth token")
             }
         }
     }
