@@ -9,7 +9,7 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     // MARK: PROPERTIES
-    private let profileView = ProfileView()
+    private lazy var profileView = ProfileView()
     
     // MARK: - Lifecycle
     

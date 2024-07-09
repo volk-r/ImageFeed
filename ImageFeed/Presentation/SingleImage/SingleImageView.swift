@@ -25,7 +25,7 @@ final class SingleImageView: UIView {
         return scrollView
     }()
     
-    private let imageView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -33,7 +33,7 @@ final class SingleImageView: UIView {
         return imageView
     }()
     
-    let backButton: UIButton = {
+    lazy var backButton: UIButton = {
         var button = UIButton()
         let image = UIImage(systemName: "chevron.backward")
         button.imageView?.tintColor = .white
@@ -43,7 +43,7 @@ final class SingleImageView: UIView {
         return button
     }()
     
-    let shareButton: UIButton = {
+    lazy var shareButton: UIButton = {
         var button = UIButton()
         let image = UIImage(named: "Sharing")
         button.setImage(image, for: .normal)

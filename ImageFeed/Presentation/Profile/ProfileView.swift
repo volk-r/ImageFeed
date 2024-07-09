@@ -11,7 +11,7 @@ final class ProfileView: UIView {
     // MARK: PROPERTIES
     private let inset: CGFloat = 8
     
-    lazy private var profileStackView: UIStackView = {
+    private lazy var profileStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = inset
@@ -19,7 +19,7 @@ final class ProfileView: UIView {
         return stackView
     }()
     
-    private let profileImageView: UIImageView = {
+    private lazy var profileImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -29,7 +29,7 @@ final class ProfileView: UIView {
         return imageView
     }()
     
-    private let nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 23, weight: .regular)
         label.textColor = AppColorSettings.ypWhite
@@ -38,7 +38,7 @@ final class ProfileView: UIView {
         return label
     }()
     
-    private let nickLabel: UILabel = {
+    private lazy var nickLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = AppColorSettings.ypGrey
@@ -47,7 +47,7 @@ final class ProfileView: UIView {
         return label
     }()
     
-    private let statusLabel: UILabel = {
+    private lazy var statusLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = AppColorSettings.ypWhite
@@ -56,7 +56,7 @@ final class ProfileView: UIView {
         return label
     }()
     
-    private let exitButton: UIButton = {
+    private lazy var exitButton: UIButton = {
         var button = UIButton()
         let image = UIImage(systemName: "ipad.and.arrow.forward")
         button.imageView?.tintColor = UIColor(hexString: "E47370")

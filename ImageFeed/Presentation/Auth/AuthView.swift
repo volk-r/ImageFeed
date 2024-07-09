@@ -9,14 +9,14 @@ import UIKit
 
 final class AuthView: UIView {
     // MARK: PROPERTIES
-    private let logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.image = UIImage(named: "auth_screen_logo")
         
         return imageView
     }()
     
-    let loginButton: UIButton = {
+    lazy var loginButton: UIButton = {
         var button = UIButton()
         button.titleLabel?.font = .systemFont(ofSize: 17.0, weight: .bold)
         button.setTitle("Войти", for: .normal)

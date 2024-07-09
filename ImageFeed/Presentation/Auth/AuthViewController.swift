@@ -9,7 +9,7 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     // MARK: PROPERTIES
-    private let authView = AuthView()
+    private lazy var authView = AuthView()
     private let oauth2Service = OAuth2Service.shared
     
     weak var delegate: AuthViewControllerDelegate?
@@ -22,9 +22,10 @@ final class AuthViewController: UIViewController {
         
         setupButton()
     }
-    
+}
+
+extension AuthViewController {
     // MARK: - SETUP
-    
     private func setupButton() {
         authView.loginButton.addTarget(self, action: #selector(openLoginPage), for: .touchUpInside)
     }
@@ -35,6 +36,8 @@ final class AuthViewController: UIViewController {
         navigationController?.pushViewController(webViewVC, animated: true)
     }
 }
+
+// MARK: - WebViewViewControllerDelegate
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {

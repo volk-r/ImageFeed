@@ -10,7 +10,7 @@ import WebKit
 
 final class WebViewView: UIView {
     // MARK: - PROPERTIES
-    var webView: WKWebView = {
+    lazy var webView: WKWebView = {
         let webConfiguration = WKWebViewConfiguration()
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.backgroundColor = .white
@@ -18,7 +18,7 @@ final class WebViewView: UIView {
         return webView
     }()
     
-    var progressView: UIProgressView = {
+    lazy var progressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .default)
         progressView.tintColor = AppColorSettings.backgroundColor
         
