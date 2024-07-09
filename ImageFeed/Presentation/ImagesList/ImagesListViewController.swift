@@ -10,7 +10,7 @@ import UIKit
 final class ImagesListViewController: UIViewController {
     // MARK: PROPERTIES
     
-    private let imagesListView = ImagesListView()
+    private lazy var imagesListView = ImagesListView()
     
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     

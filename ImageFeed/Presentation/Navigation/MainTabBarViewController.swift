@@ -8,20 +8,22 @@
 import UIKit
 
 final class MainTabBarViewController: UITabBarController {
-    
     private let profileVC = ProfileViewController()
     private let ImagesListVC = ImagesListViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupAppearance()
+        setupControllers()
+    }
+    
+    private func setupAppearance() {
         UITabBar.appearance().barTintColor = AppColorSettings.backgroundColor
         UITabBar.appearance().tintColor = .white
         
         UINavigationBar.appearance().barTintColor = AppColorSettings.backgroundColor
         UINavigationBar.appearance().tintColor = .white
-        
-        setupControllers()
     }
     
     private func setupControllers() {

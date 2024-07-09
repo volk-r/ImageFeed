@@ -9,7 +9,7 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     // MARK: - PROPERTIES
-    private var singleImageView: SingleImageView?
+    private lazy var singleImageView: SingleImageView?
     
     // MARK: - Lifecycle
     init(model: SingleImageModel) {

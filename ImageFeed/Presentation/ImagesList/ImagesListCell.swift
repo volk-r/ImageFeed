@@ -15,7 +15,7 @@ final class ImagesListCell: UITableViewCell {
        
     private var indexPathCell = IndexPath()
     
-    private let postImageView: UIImageView = {
+    private lazy var postImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -25,7 +25,7 @@ final class ImagesListCell: UITableViewCell {
         return imageView
     }()
     
-    private let descriptionLabel: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = .white
@@ -34,7 +34,7 @@ final class ImagesListCell: UITableViewCell {
         return label
     }()
     
-    private let likeButton: UIButton = {
+    private lazy var likeButton: UIButton = {
         var button = UIButton()
         let image = UIImage(systemName: "suit.heart.fill")
         button.setImage(image, for: .normal)
