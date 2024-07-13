@@ -15,27 +15,48 @@ struct OAuthTokenResponseBody: Decodable {
     }
 }
 
+enum AuthServiceError: Error {
+    case invalidRequest
+}
+
 final class OAuth2Service {
     static let shared = OAuth2Service()
+    private let urlSession = URLSession.shared
+    
+    private var task: Task<(), Never>?
+    private var lastCode: String?
     
     private init() {
         
     }
 
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let request = makeOAuthTokenRequest(code: code) else {
-            print(#file, #function, #line)
-            print("Unable to construct OAuth token request")
+        assert(Thread.isMainThread)
+        
+        if lastCode == code {
+            completion(.failure(AuthServiceError.invalidRequest))
             return
         }
         
-        URLSession.shared.data(for: request) { result in
+        task?.cancel()
+        lastCode = code
+        
+        guard let request = makeOAuthTokenRequest(code: code) else {
+            completion(.failure(AuthServiceError.invalidRequest))
+            return
+        }
+        
+        task = urlSession.data(for: request) { [weak self] result in
+            guard let self else { return }
+            
             switch result {
             case .success(let data):
                 do {
                     let decoder = JSONDecoder()
                     let oAuthTokenData = try decoder.decode(OAuthTokenResponseBody.self, from: data)
                     completion(.success(oAuthTokenData.accessToken))
+                    self.task = nil
+                    self.lastCode = nil
                 } catch {
                     print("failed data decoding",#file, #function, #line)
                     completion(.failure(error))
@@ -48,7 +69,7 @@ final class OAuth2Service {
     
     func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: Constants.unsplashTokenURLString) else {
-            print("failed created URLComponents")
+            assertionFailure("Failed to create URLComponents")
             return nil
         }
         
@@ -61,7 +82,7 @@ final class OAuth2Service {
         ]
         
         guard let url = urlComponents.url else {
-            print("failed created url from components")
+            assertionFailure("Failed to create URL from URLComponents")
             return nil
         }
         

@@ -26,14 +26,14 @@ extension URLSession {
         case internalServerError = 500
     }
     
-    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) {
+    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> Task<(), Never> {
         let fulfillCompletionOnTheMainThread: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
         }
         
-        Task {
+        let task = Task {
             do {
                 let data = try await self.fetchAsync(request: request)
                 fulfillCompletionOnTheMainThread(.success(data))
@@ -42,6 +42,8 @@ extension URLSession {
                 fulfillCompletionOnTheMainThread(.failure(error))
             }
         }
+        
+        return task
     }
     
     func fetchAsync(request: URLRequest) async throws -> Data {
