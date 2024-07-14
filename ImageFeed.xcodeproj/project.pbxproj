@@ -14,6 +14,7 @@
 		3C204FA62C3B0FE500404D3C /* AuthViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204FA52C3B0FE500404D3C /* AuthViewControllerDelegate.swift */; };
 		3C336C232C41B0F4007B0A47 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 3C336C222C41B0F4007B0A47 /* ProgressHUD */; };
 		3C336C252C44150B007B0A47 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C336C242C44150B007B0A47 /* UIBlockingProgressHUD.swift */; };
+		3C336C272C4418EF007B0A47 /* ProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C336C262C4418EF007B0A47 /* ProfileService.swift */; };
 		3C35C3AB2C10E1D5000BA1FE /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */; };
 		3C35C3AF2C1217E9000BA1FE /* ImagesListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */; };
 		3C35C3B22C121A81000BA1FE /* AppColorSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C35C3B12C121A81000BA1FE /* AppColorSettings.swift */; };
@@ -49,6 +50,7 @@
 		3C204FA32C3AFE3D00404D3C /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		3C204FA52C3B0FE500404D3C /* AuthViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewControllerDelegate.swift; sourceTree = "<group>"; };
 		3C336C242C44150B007B0A47 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
+		3C336C262C4418EF007B0A47 /* ProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileService.swift; sourceTree = "<group>"; };
 		3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		3C35C3AE2C1217E9000BA1FE /* ImagesListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListView.swift; sourceTree = "<group>"; };
 		3C35C3B12C121A81000BA1FE /* AppColorSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColorSettings.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 			children = (
 				3C204F9B2C396D5400404D3C /* OAuth2Service.swift */,
 				3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */,
+				3C336C262C4418EF007B0A47 /* ProfileService.swift */,
 				3C336C242C44150B007B0A47 /* UIBlockingProgressHUD.swift */,
 			);
 			path = Services;
@@ -363,6 +366,7 @@
 				3C6F32612C3087BC00CD930F /* Constants.swift in Sources */,
 				3C204FA62C3B0FE500404D3C /* AuthViewControllerDelegate.swift in Sources */,
 				3C95FC112C348CF2000F2256 /* WebViewViewControllerDelegate.swift in Sources */,
+				3C336C272C4418EF007B0A47 /* ProfileService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

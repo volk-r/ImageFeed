@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: OAuthTokenResponseBody
+
 struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
     
@@ -15,11 +17,14 @@ struct OAuthTokenResponseBody: Decodable {
     }
 }
 
+// MARK: AuthServiceError
+
 enum AuthServiceError: Error {
     case invalidRequest
 }
 
 final class OAuth2Service {
+    // MARK: PROPERTIES
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
     
@@ -29,7 +34,8 @@ final class OAuth2Service {
     private init() {
         
     }
-
+    
+    // MARK: fetchOAuthToken
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         
@@ -58,7 +64,7 @@ final class OAuth2Service {
                     self.task = nil
                     self.lastCode = nil
                 } catch {
-                    print("failed data decoding",#file, #function, #line)
+                    print("failed data decoding", #file, #function, #line)
                     completion(.failure(error))
                 }
             case .failure(let error):
@@ -67,7 +73,8 @@ final class OAuth2Service {
         }
     }
     
-    func makeOAuthTokenRequest(code: String) -> URLRequest? {
+    // MARK: makeOAuthTokenRequest
+    private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: Constants.unsplashTokenURLString) else {
             assertionFailure("Failed to create URLComponents")
             return nil

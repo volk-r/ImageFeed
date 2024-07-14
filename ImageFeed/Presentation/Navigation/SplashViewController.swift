@@ -9,10 +9,12 @@ import UIKit
 
 final class SplashViewController: UINavigationController {
     private let tokenStorage: OAuth2TokenStorageProtocol = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = AppColorSettings.backgroundColor
+        navigationBar.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -23,10 +25,7 @@ final class SplashViewController: UINavigationController {
             return
         }
         
-        print("SplashViewController -> token", token)
-        // TODO: get User Data
-        print("switch to profile", token)
-        switchToTabBarController()
+        fetchProfile(token)
     }
 }
 
@@ -48,12 +47,36 @@ extension SplashViewController {
         let tabBarController = MainTabBarViewController()
         window.rootViewController = tabBarController
     }
+    
+    // MARK: fetchProfile
+    private func fetchProfile(_ token: String) {
+        UIBlockingProgressHUD.show()
+        profileService.fetchProfile(token) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+
+            guard let self = self else { return }
+
+            switch result {
+            case .success:
+               self.switchToTabBarController()
+
+            case .failure:
+                // TODO: [Sprint 11] Покажите ошибку получения профиля
+                break
+            }
+        }
+    }
 }
 
 // MARK: - AuthViewControllerDelegate
 extension SplashViewController: AuthViewControllerDelegate {
     func didAuthenticate(_ vc: AuthViewController) {
         vc.dismiss(animated: true)
-        switchToTabBarController()
+        
+        guard let token = tokenStorage.token else {
+            return
+        }
+        
+        fetchProfile(token)
     }
 }

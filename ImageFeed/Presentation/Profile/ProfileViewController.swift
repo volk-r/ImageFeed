@@ -10,21 +10,38 @@ import UIKit
 final class ProfileViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var profileView = ProfileView()
+    private let profileService = ProfileService.shared
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view = profileView
         
-        setupMockUser()
+        guard let profile = profileService.profile else {
+            print("no profile data found", #file, #function, #line)
+            return
+        }
+        
+        updateProfileDetails(profile: profile)
     }
-    
-    // MARK: - SETUP
-    
 }
 
+// MARK: - SETUP
 extension ProfileViewController {
+    // MARK: - updateProfileDetails
+    private func updateProfileDetails(profile: Profile) {
+        // TODO: image
+        let profileData = ProfileModel(
+            image: UIImage(),
+            name: profile.name,
+            nick: profile.username,
+            status: profile.bio
+        )
+        
+        profileView.setupProfile(with: profileData)
+    }
+    
+    // MARK: - setupMockUser
     private func setupMockUser() {
         let image = UIImage(named: "mockUser")
         
