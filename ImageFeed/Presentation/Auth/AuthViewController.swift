@@ -11,7 +11,7 @@ import ProgressHUD
 final class AuthViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var authView = AuthView()
-    private let oauth2Service = OAuth2Service.shared
+    private let oauth2Service: OAuth2ServiceProtocol = OAuth2Service.shared
     
     weak var delegate: AuthViewControllerDelegate?
     

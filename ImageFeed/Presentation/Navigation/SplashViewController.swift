@@ -9,7 +9,7 @@ import UIKit
 
 final class SplashViewController: UINavigationController {
     private let tokenStorage: OAuth2TokenStorageProtocol = OAuth2TokenStorage()
-    private let profileService = ProfileService.shared
+    private let profileService: ProfileServiceProtocol = ProfileService.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,8 +57,9 @@ extension SplashViewController {
             guard let self = self else { return }
 
             switch result {
-            case .success:
-               self.switchToTabBarController()
+            case .success(let profileData):
+                ProfileImageService.shared.fetchProfileImageURL(username: profileData.username) { _ in }
+                self.switchToTabBarController()
 
             case .failure:
                 // TODO: [Sprint 11] Покажите ошибку получения профиля

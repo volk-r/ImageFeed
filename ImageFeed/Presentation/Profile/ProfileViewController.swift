@@ -10,7 +10,7 @@ import UIKit
 final class ProfileViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var profileView = ProfileView()
-    private let profileService = ProfileService.shared
+    private let profileService: ProfileServiceProtocol = ProfileService.shared
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ extension ProfileViewController {
         let profileData = ProfileModel(
             image: UIImage(),
             name: profile.name,
-            nick: profile.username,
+            nick: profile.loginName,
             status: profile.bio
         )
         

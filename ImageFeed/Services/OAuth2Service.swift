@@ -8,22 +8,26 @@
 import Foundation
 
 // MARK: OAuthTokenResponseBody
-
 struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
     
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"
     }
 }
 
 // MARK: AuthServiceError
-
 enum AuthServiceError: Error {
     case invalidRequest
 }
 
-final class OAuth2Service {
+// MARK: OAuth2ServiceProtocol
+protocol OAuth2ServiceProtocol {
+    func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void)
+}
+
+// MARK: // MARK: ProfileService
+final class OAuth2Service: OAuth2ServiceProtocol {
     // MARK: PROPERTIES
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
@@ -76,7 +80,7 @@ final class OAuth2Service {
     // MARK: makeOAuthTokenRequest
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: Constants.unsplashTokenURLString) else {
-            assertionFailure("Failed to create URLComponents")
+            assertionFailure("failed to create URLComponents")
             return nil
         }
         
@@ -89,7 +93,7 @@ final class OAuth2Service {
         ]
         
         guard let url = urlComponents.url else {
-            assertionFailure("Failed to create URL from URLComponents")
+            assertionFailure("failed to create URL from URLComponents")
             return nil
         }
         

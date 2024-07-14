@@ -8,11 +8,18 @@
 import Foundation
 
 // MARK: struct Profile
-
 struct Profile {
     let username: String
+    let loginName: String
     let name: String
     let bio: String
+    
+    init(result: ProfileResult) {
+        self.username = result.username
+        self.name = ("\(result.firstName) \(result.lastName ?? "")")
+        self.loginName = "@\(result.username)"
+        self.bio = ("\(result.bio ?? "")")
+    }
 }
 
 // MARK: struct ProfileResult
@@ -22,7 +29,7 @@ struct ProfileResult: Codable {
     let lastName: String?
     let bio: String?
     
-    enum CodingKeys: String, CodingKey {
+    private enum CodingKeys: String, CodingKey {
         case username
         case firstName = "first_name"
         case lastName = "last_name"
@@ -35,7 +42,14 @@ enum ProfileServiceError: Error {
     case invalidRequest
 }
 
-final class ProfileService {
+// MARK: ProfileServiceProtocol
+protocol ProfileServiceProtocol {
+    var profile: Profile? { get }
+    func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void)
+}
+
+// MARK: ProfileService
+final class ProfileService: ProfileServiceProtocol {
     // MARK: PROPERTIES
     static let shared = ProfileService()
     
@@ -67,11 +81,7 @@ final class ProfileService {
                     let decoder = JSONDecoder()
                     let profileResult = try decoder.decode(ProfileResult.self, from: data)
                     
-                    self.profile = Profile(
-                        username: profileResult.username,
-                        name: "\(profileResult.firstName) \(profileResult.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines),
-                        bio: profileResult.bio ?? ""
-                    )
+                    self.profile = Profile(result: profileResult)
                     
                     guard let profileData = self.profile else {
                         print("failed get profileData", #file, #function, #line)
@@ -95,7 +105,7 @@ final class ProfileService {
         let profileBaseURL =  URL(string: "me", relativeTo: Constants.defaultBaseURL)
         
         guard let url = profileBaseURL else {
-            assertionFailure("Failed to create URL from URLComponents")
+            assertionFailure("failed to create URL")
             return nil
         }
         
