@@ -12,10 +12,23 @@ final class ProfileViewController: UIViewController {
     private lazy var profileView = ProfileView()
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view = profileView
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
         
         guard let profile = profileService.profile else {
             print("no profile data found", #file, #function, #line)
@@ -27,7 +40,7 @@ final class ProfileViewController: UIViewController {
 }
 
 // MARK: - SETUP
-extension ProfileViewController {
+private extension ProfileViewController {
     // MARK: - updateProfileDetails
     private func updateProfileDetails(profile: Profile) {
         // TODO: image
@@ -53,5 +66,14 @@ extension ProfileViewController {
         )
         
         profileView.setupProfile(with: profileData)
+    }
+    
+    // MARK: - updateAvatar
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        // TODO: [Sprint 11] Обновите аватар, используя Kingfisher
     }
 }

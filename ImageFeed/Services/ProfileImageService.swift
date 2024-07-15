@@ -32,6 +32,9 @@ protocol ProfileImageServiceProtocol {
 final class ProfileImageService: ProfileImageServiceProtocol {
     // MARK: PROPERTIES
     static let shared = ProfileImageService()
+    
+    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    
     private (set) var avatarURL: String?
     
     private let urlSession = URLSession.shared
@@ -69,6 +72,13 @@ final class ProfileImageService: ProfileImageServiceProtocol {
                     
                     completion(.success(avatarURL))
                     self.task = nil
+                    
+                    NotificationCenter.default
+                        .post(
+                            name: ProfileImageService.didChangeNotification,
+                            object: self,
+                            userInfo: ["URL": avatarURL]
+                        )
                 } catch {
                     print("failed profile image data decoding", #file, #function, #line)
                     completion(.failure(error))
