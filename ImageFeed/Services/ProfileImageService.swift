@@ -62,7 +62,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
                 self.avatarURL = userResult.profileImage.small
                 
                 guard let avatarURL = self.avatarURL else {
-                    print("failed get avatarURL", #file, #function, #line)
+                    print("failed to get avatarURL", #file, #function, #line)
                     return
                 }
                 
@@ -76,6 +76,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
                         userInfo: ["URL": avatarURL]
                     )
             case .failure(let error):
+                print("failed to get avatarURL: \(error.localizedDescription)", #file, #function, #line)
                 completion(.failure(error))
             }
         }

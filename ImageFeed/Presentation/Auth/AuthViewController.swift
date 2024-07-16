@@ -59,9 +59,23 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 
                 delegate?.didAuthenticate(self)
             case .failure(let error):
-                print(error, #file, #function, #line)
+                print("failed to fetch OAuthToken: \(error.localizedDescription)", #file, #function, #line)
+                callAlert()
             }
         }
+    }
+                    
+    func callAlert() {
+        let alert = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert)
+        
+        let action = UIAlertAction (title: "Ок", style: .default)
+        
+        alert.addAction(action)
+        alert.view.accessibilityIdentifier = "alert"
+        present(alert, animated: true, completion: nil)
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

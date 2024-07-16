@@ -19,6 +19,7 @@ struct OAuthTokenResponseBody: Decodable {
 // MARK: AuthServiceError
 enum AuthServiceError: Error {
     case invalidRequest
+    case invalidCode
 }
 
 // MARK: OAuth2ServiceProtocol
@@ -44,7 +45,7 @@ final class OAuth2Service: OAuth2ServiceProtocol {
         assert(Thread.isMainThread)
         
         if lastCode == code {
-            completion(.failure(AuthServiceError.invalidRequest))
+            completion(.failure(AuthServiceError.invalidCode))
             return
         }
         
@@ -65,6 +66,7 @@ final class OAuth2Service: OAuth2ServiceProtocol {
                 self.task = nil
                 self.lastCode = nil
             case .failure(let error):
+                print("failed to get accessToken: \(error.localizedDescription)", #file, #function, #line)
                 completion(.failure(error))
             }
         }

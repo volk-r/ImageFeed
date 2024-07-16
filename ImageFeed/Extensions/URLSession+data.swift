@@ -44,7 +44,7 @@ extension URLSession {
                     let jsonResponse = try decoder.decode(T.self, from: data)
                     fulfillCompletionOnTheMainThread(.success(jsonResponse))
                 } catch {
-                    print("failed data decoding", #file, #function, #line)
+                    print("failed data decoding: \(error.localizedDescription), Data: \(String(data: data, encoding: .utf8) ?? "")", #file, #function, #line)
                     fulfillCompletionOnTheMainThread(.failure(error))
                 }
             case .failure(let error):

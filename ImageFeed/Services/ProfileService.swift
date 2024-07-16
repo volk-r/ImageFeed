@@ -80,13 +80,14 @@ final class ProfileService: ProfileServiceProtocol {
                 self.profile = Profile(result: profileResult)
                 
                 guard let profileData = self.profile else {
-                    print("failed get profileData", #file, #function, #line)
+                    print("failed to get profileData", #file, #function, #line)
                     return
                 }
                 
                 completion(.success(profileData))
                 self.task = nil
             case .failure(let error):
+                print("failed to get profileData: \(error.localizedDescription)", #file, #function, #line)
                 completion(.failure(error))
             }
         }
