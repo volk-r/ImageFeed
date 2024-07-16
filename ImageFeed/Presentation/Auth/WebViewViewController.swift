@@ -10,9 +10,11 @@ import WebKit
 
 final class WebViewViewController: UIViewController, WKUIDelegate {
     // MARK: - PROPERTIES
+    weak var delegate: WebViewViewControllerDelegate?
+    
     private lazy var webViewView = WebViewView()
     
-    weak var delegate: WebViewViewControllerDelegate?
+    private var estimatedProgressObservation: NSKeyValueObservation?
     
     // MARK: - Lifecycle
     override func loadView() {
@@ -27,26 +29,26 @@ final class WebViewViewController: UIViewController, WKUIDelegate {
         loadAuthView()
         
         configureBackButton()
+        
+        estimatedProgressObservation = webViewView.webView.observe(
+            \.estimatedProgress,
+             options: [],
+             changeHandler: { [weak self] _, _ in
+                 guard let self = self else { return }
+                 self.updateProgress()
+             })
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.isHidden = false
         tabBarController?.tabBar.isHidden = true
-        
-        webViewView.webView.addObserver(
-            self,
-            forKeyPath: #keyPath(WKWebView.estimatedProgress),
-            options: .new,
-            context: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.navigationBar.isHidden = true
         tabBarController?.tabBar.isHidden = false
-        
-        webViewView.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
     }
 }
 
@@ -93,19 +95,6 @@ extension WebViewViewController {
     }
     
     // MARK: - UPDATE progressView
-    override func observeValue(
-        forKeyPath keyPath: String?,
-        of object: Any?,
-        change: [NSKeyValueChangeKey : Any]?,
-        context: UnsafeMutableRawPointer?
-    ) {
-        if keyPath == #keyPath(WKWebView.estimatedProgress) {
-            updateProgress()
-        } else {
-            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-        }
-    }
-
     private func updateProgress() {
         webViewView.progressView.progress = Float(webViewView.webView.estimatedProgress)
         webViewView.progressView.isHidden = fabs(webViewView.webView.estimatedProgress - 1.0) <= 0.0001
