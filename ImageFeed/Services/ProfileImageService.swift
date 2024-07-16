@@ -54,35 +54,27 @@ final class ProfileImageService: ProfileImageServiceProtocol {
             return
         }
         
-        task = urlSession.data(for: request) { [weak self] result in
+        task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self else { return }
             
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let userResult = try decoder.decode(UserResult.self, from: data)
-                    
-                    self.avatarURL = userResult.profileImage.small
-                    
-                    guard let avatarURL = self.avatarURL else {
-                        print("failed get avatarURL", #file, #function, #line)
-                        return
-                    }
-                    
-                    completion(.success(avatarURL))
-                    self.task = nil
-                    
-                    NotificationCenter.default
-                        .post(
-                            name: ProfileImageService.didChangeNotification,
-                            object: self,
-                            userInfo: ["URL": avatarURL]
-                        )
-                } catch {
-                    print("failed profile image data decoding", #file, #function, #line)
-                    completion(.failure(error))
+            case .success(let userResult):
+                self.avatarURL = userResult.profileImage.small
+                
+                guard let avatarURL = self.avatarURL else {
+                    print("failed get avatarURL", #file, #function, #line)
+                    return
                 }
+                
+                completion(.success(avatarURL))
+                self.task = nil
+                
+                NotificationCenter.default
+                    .post(
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["URL": avatarURL]
+                    )
             case .failure(let error):
                 completion(.failure(error))
             }

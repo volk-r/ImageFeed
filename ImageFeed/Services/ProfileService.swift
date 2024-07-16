@@ -72,28 +72,20 @@ final class ProfileService: ProfileServiceProtocol {
             return
         }
         
-        task = urlSession.data(for: request) { [weak self] result in
+        task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self else { return }
             
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let profileResult = try decoder.decode(ProfileResult.self, from: data)
-                    
-                    self.profile = Profile(result: profileResult)
-                    
-                    guard let profileData = self.profile else {
-                        print("failed get profileData", #file, #function, #line)
-                        return
-                    }
-                    
-                    completion(.success(profileData))
-                    self.task = nil
-                } catch {
-                    print("failed profile data decoding", #file, #function, #line)
-                    completion(.failure(error))
+            case .success(let profileResult):
+                self.profile = Profile(result: profileResult)
+                
+                guard let profileData = self.profile else {
+                    print("failed get profileData", #file, #function, #line)
+                    return
                 }
+                
+                completion(.success(profileData))
+                self.task = nil
             case .failure(let error):
                 completion(.failure(error))
             }

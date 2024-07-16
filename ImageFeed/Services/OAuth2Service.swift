@@ -56,21 +56,14 @@ final class OAuth2Service: OAuth2ServiceProtocol {
             return
         }
         
-        task = urlSession.data(for: request) { [weak self] result in
+        task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self else { return }
             
             switch result {
-            case .success(let data):
-                do {
-                    let decoder = JSONDecoder()
-                    let oAuthTokenData = try decoder.decode(OAuthTokenResponseBody.self, from: data)
-                    completion(.success(oAuthTokenData.accessToken))
-                    self.task = nil
-                    self.lastCode = nil
-                } catch {
-                    print("failed data decoding", #file, #function, #line)
-                    completion(.failure(error))
-                }
+            case .success(let oAuthTokenData):
+                completion(.success(oAuthTokenData.accessToken))
+                self.task = nil
+                self.lastCode = nil
             case .failure(let error):
                 completion(.failure(error))
             }
