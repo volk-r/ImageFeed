@@ -6,10 +6,19 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileView: UIView {
     // MARK: PROPERTIES
     private let inset: CGFloat = 8
+    
+    private let defaultAvatar: UIImage? = UIImage(
+        systemName: "person.crop.circle.fill"
+    )?.withTintColor(
+        AppColorSettings.ypWhite
+    ).resized(
+        to: CGSize(width: 70, height: 70)
+    )
     
     private lazy var profileStackView: UIStackView = {
         let stackView = UIStackView()
@@ -114,17 +123,43 @@ final class ProfileView: UIView {
 extension ProfileView {
     // MARK: - FUNCTIONS
     func setUnknownProfile() {
-        let image = UIImage(systemName: "person.crop.circle.fill")?.withTintColor(AppColorSettings.ypWhite)
-        profileImageView.image = image?.resized(to: CGSize(width: 70, height: 70))
+        profileImageView.image = defaultAvatar
         nameLabel.text = ""
         nickLabel.text = ""
         statusLabel.text = ""
     }
     
     func setupProfile(with profileData: ProfileModel) {
-        profileImageView.image = profileData.image.resized(to: CGSize(width: 70, height: 70))
+        profileImageView.image = defaultAvatar
         nameLabel.text = profileData.name
         nickLabel.text = profileData.nick
         statusLabel.text = profileData.status
+    }
+    
+    func setupMockAvatar(with image: UIImage?) {
+        profileImageView.image = image?.resized(to: CGSize(width: 70, height: 70))
+    }
+    
+    func setupAvatar(from url: URL) {
+        ImageCache.default.clearCache()
+        
+        profileImageView.kf.indicatorType = .activity
+        let processor = RoundCornerImageProcessor(cornerRadius: 15)
+        
+        profileImageView.kf.setImage(
+            with: url,
+            options: [
+                .processor(processor),
+                .transition(.flipFromLeft(0.3))
+            ]
+        ) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let value):
+                profileImageView.image = value.image.resized(to: CGSize(width: 70, height: 70))
+            case .failure(let error):
+                print("failed update avatar: \(error.errorCode) \(error.localizedDescription)", #file, #function, #line)
+            }
+        }
     }
 }

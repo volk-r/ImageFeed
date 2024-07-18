@@ -8,7 +8,6 @@
 import UIKit
 
 struct ProfileModel {
-    let image: UIImage
     let name: String
     let nick: String
     let status: String

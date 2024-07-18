@@ -45,7 +45,6 @@ private extension ProfileViewController {
     private func updateProfileDetails(profile: Profile) {
         // TODO: image
         let profileData = ProfileModel(
-            image: UIImage(),
             name: profile.name,
             nick: profile.loginName,
             status: profile.bio
@@ -56,16 +55,15 @@ private extension ProfileViewController {
     
     // MARK: - setupMockUser
     private func setupMockUser() {
-        let image = UIImage(named: "mockUser")
-        
         let profileData = ProfileModel(
-            image: image ?? UIImage(),
             name: "Екатерина Новикова",
             nick: "@ekaterina_nov",
             status: "Hello, world!"
         )
-        
         profileView.setupProfile(with: profileData)
+        
+        let image = UIImage(named: "mockUser")
+        profileView.setupMockAvatar(with: image)
     }
     
     // MARK: - updateAvatar
@@ -74,6 +72,7 @@ private extension ProfileViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        // TODO: [Sprint 11] Обновите аватар, используя Kingfisher
+        
+        profileView.setupAvatar(from: url)
     }
 }

@@ -13,6 +13,8 @@ final class AuthViewController: UIViewController {
     private lazy var authView = AuthView()
     private let oauth2Service: OAuth2ServiceProtocol = OAuth2Service.shared
     
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
+    
     weak var delegate: AuthViewControllerDelegate?
     
     // MARK: - Lifecycle
@@ -66,16 +68,14 @@ extension AuthViewController: WebViewViewControllerDelegate {
     }
                     
     func callAlert() {
-        let alert = UIAlertController(
+        let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
-            preferredStyle: .alert)
+            buttonText: "Ok"
+        ) {
+        }
         
-        let action = UIAlertAction (title: "Ок", style: .default)
-        
-        alert.addAction(action)
-        alert.view.accessibilityIdentifier = "alert"
-        present(alert, animated: true, completion: nil)
+        alertPresenter.callAlert(with: alert)
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

@@ -11,6 +11,8 @@ final class SplashViewController: UINavigationController {
     private let tokenStorage: OAuth2TokenStorageProtocol = OAuth2TokenStorage()
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = AppColorSettings.backgroundColor
@@ -60,12 +62,29 @@ extension SplashViewController {
             case .success(let profileData):
                 ProfileImageService.shared.fetchProfileImageURL(username: profileData.username) { _ in }
                 self.switchToTabBarController()
-
             case .failure:
-                // TODO: [Sprint 11] Покажите ошибку получения профиля
-                break
+                callAlert()
             }
         }
+    }
+    
+    private func callAlert() {
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось загрузить профиль",
+            buttonText: "Попробовать еще раз"
+        ) { [weak self] in
+            guard let self = self else { return }
+            
+            guard let token = self.tokenStorage.token else {
+                self.showAuthScreen()
+                return
+            }
+            
+            self.fetchProfile(token)
+        }
+        
+        alertPresenter.callAlert(with: alert)
     }
 }
 
