@@ -43,7 +43,6 @@ final class ProfileViewController: UIViewController {
 private extension ProfileViewController {
     // MARK: - updateProfileDetails
     private func updateProfileDetails(profile: Profile) {
-        // TODO: image
         let profileData = ProfileModel(
             name: profile.name,
             nick: profile.loginName,
