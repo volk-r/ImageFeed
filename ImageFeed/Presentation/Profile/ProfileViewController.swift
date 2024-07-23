@@ -37,6 +37,14 @@ final class ProfileViewController: UIViewController {
         
         updateProfileDetails(profile: profile)
     }
+    
+    deinit {
+        guard let profileImageServiceObserver else {
+            return
+        }
+        
+        NotificationCenter.default.removeObserver(profileImageServiceObserver)
+    }
 }
 
 // MARK: - SETUP
