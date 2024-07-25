@@ -26,14 +26,43 @@ extension URLSession {
         case internalServerError = 500
     }
     
-    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) {
+    func objectTask<T: Decodable>(
+        for request: URLRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) -> Task<(), Never> {
+        let fulfillCompletionOnTheMainThread: (Result<T, Error>) -> Void = { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+        
+        let task = data(for: request) { (result: Result<Data, Error>) in
+            switch result {
+            case .success(let data):
+                do {
+                    let decoder = JSONDecoder()
+                    let jsonResponse = try decoder.decode(T.self, from: data)
+                    fulfillCompletionOnTheMainThread(.success(jsonResponse))
+                } catch {
+                    print("failed data decoding: \(error.localizedDescription), Data: \(String(data: data, encoding: .utf8) ?? "")", #file, #function, #line)
+                    fulfillCompletionOnTheMainThread(.failure(error))
+                }
+            case .failure(let error):
+                fulfillCompletionOnTheMainThread(.failure(error))
+            }
+        }
+        
+        return task
+    }
+    
+    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> Task<(), Never> {
         let fulfillCompletionOnTheMainThread: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
             }
         }
         
-        Task {
+        let task = Task {
             do {
                 let data = try await self.fetchAsync(request: request)
                 fulfillCompletionOnTheMainThread(.success(data))
@@ -42,6 +71,8 @@ extension URLSession {
                 fulfillCompletionOnTheMainThread(.failure(error))
             }
         }
+        
+        return task
     }
     
     func fetchAsync(request: URLRequest) async throws -> Data {

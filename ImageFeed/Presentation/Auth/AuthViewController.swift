@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import ProgressHUD
 
 final class AuthViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var authView = AuthView()
-    private let oauth2Service = OAuth2Service.shared
+    private let oauth2Service: OAuth2ServiceProtocol = OAuth2Service.shared
+    
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -43,8 +46,12 @@ extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
         vc.dismiss(animated: true)
         
-        // MARK: - TODO fetchOAuthToken
+        UIBlockingProgressHUD.show()
+        
+        // MARK: - fetchOAuthToken
         oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
             guard let self else { return }
             
             switch result {
@@ -54,9 +61,21 @@ extension AuthViewController: WebViewViewControllerDelegate {
                 
                 delegate?.didAuthenticate(self)
             case .failure(let error):
-                print(error, #file, #function, #line)
+                print("failed to fetch OAuthToken: \(error.localizedDescription)", #file, #function, #line)
+                callAlert()
             }
         }
+    }
+                    
+    func callAlert() {
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            buttonText: "Ok"
+        ) {
+        }
+        
+        alertPresenter.callAlert(with: alert)
     }
 
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {

@@ -76,7 +76,7 @@ final class ImagesListCell: UITableViewCell {
             postImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             postImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
             postImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
-            postImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset / 4),
+            postImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset / 2),
             
             likeButton.topAnchor.constraint(equalTo: postImageView.topAnchor, constant: 12),
             likeButton.trailingAnchor.constraint(equalTo: postImageView.trailingAnchor, constant: -10.5),

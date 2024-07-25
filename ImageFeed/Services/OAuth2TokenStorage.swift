@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftKeychainWrapper
 
 protocol OAuth2TokenStorageProtocol {
     var token: String? { get set }
@@ -13,7 +14,7 @@ protocol OAuth2TokenStorageProtocol {
 }
 
 final class OAuth2TokenStorage: OAuth2TokenStorageProtocol {
-    private let userDefaults = UserDefaults.standard
+    private let keychain = KeychainWrapper.standard
     
     private enum Keys: String {
         case token
@@ -21,19 +22,24 @@ final class OAuth2TokenStorage: OAuth2TokenStorageProtocol {
     
     var token: String? {
         get {
-            userDefaults.string(forKey: Keys.token.rawValue)
+            keychain.string(forKey: Keys.token.rawValue)
         }
         set {
             guard let newValue else {
                 assertionFailure("invalid token")
                 return
             }
-            userDefaults.set(newValue, forKey: Keys.token.rawValue)
+            
+            let isSuccess = keychain.set(newValue, forKey: Keys.token.rawValue)
+            
+            guard isSuccess else {
+                assertionFailure("failed save token")
+                return
+            }
         }
     }
     
     func clean() {
-        let dictionary = userDefaults.dictionaryRepresentation()
-        dictionary.keys.forEach { userDefaults.removeObject(forKey: $0) }
+        keychain.removeObject(forKey: Keys.token.rawValue)
     }
 }
