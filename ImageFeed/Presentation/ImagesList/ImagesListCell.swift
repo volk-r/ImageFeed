@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ImagesListCell: UITableViewCell {
     // MARK: - PROPERTIES
@@ -43,6 +44,10 @@ final class ImagesListCell: UITableViewCell {
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
         return button
+    }()
+    
+    private lazy var placeholderImage: UIImage? = {
+        UIImage(named: "images_list_placeholder")
     }()
     
     // MARK: - INIT
@@ -92,6 +97,9 @@ extension ImagesListCell {
     // MARK: - FUNCTIONS
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        postImageView.kf.cancelDownloadTask()
+        
         postImageView.image = nil
         descriptionLabel.text = ""
         likeButton.imageView?.tintColor = .white
@@ -99,7 +107,25 @@ extension ImagesListCell {
     }
     
     func setupCell(with cellData: ImagesListCellModel) {
-        postImageView.image = cellData.image
+        guard let imageUrl = URL(string: cellData.imageURL) else {
+            print("failed create image URL from: \(cellData.imageURL)", #file, #function, #line)
+            return
+        }
+        
+        postImageView.kf.indicatorType = .activity
+        postImageView.kf.setImage(
+            with: imageUrl,
+            placeholder: placeholderImage
+        ) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let value):
+                postImageView.image = value.image
+            case .failure(let error):
+                print("failed upload photo: \(error.errorCode) \(error.localizedDescription)", #file, #function, #line)
+            }
+        }
+        
         descriptionLabel.text = cellData.date
         likeButton.imageView?.tintColor = cellData.isLiked
             ? UIColor(hexString: "F56B6C")
