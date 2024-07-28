@@ -84,7 +84,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
     
     // MARK: makeBaseProfilePublicDataRequest
     private func makeBaseProfilePublicDataRequest(for username: String) -> URLRequest? {
-        let profileBaseURL =  URL(string: "users/\(username)", relativeTo: Constants.defaultBaseURL)
+        let profileBaseURL = URL(string: "users/\(username)", relativeTo: Constants.defaultBaseURL)
         
         guard let url = profileBaseURL else {
             assertionFailure("failed to create profileBaseURL")

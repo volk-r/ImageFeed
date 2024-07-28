@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C03906B2C55641E00DE84DC /* ImagesListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C03906A2C55641E00DE84DC /* ImagesListService.swift */; };
+		3C03906D2C56417500DE84DC /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C03906C2C56417500DE84DC /* String+Extensions.swift */; };
 		3C204F9C2C396D5400404D3C /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9B2C396D5400404D3C /* OAuth2Service.swift */; };
 		3C204FA02C39A94F00404D3C /* URLSession+data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204F9F2C39A94F00404D3C /* URLSession+data.swift */; };
 		3C204FA22C39D9DD00404D3C /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */; };
@@ -50,6 +52,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3C03906A2C55641E00DE84DC /* ImagesListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListService.swift; sourceTree = "<group>"; };
+		3C03906C2C56417500DE84DC /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		3C204F9B2C396D5400404D3C /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		3C204F9F2C39A94F00404D3C /* URLSession+data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift"; sourceTree = "<group>"; };
 		3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
@@ -111,6 +115,7 @@
 				3C204FA12C39D9DD00404D3C /* OAuth2TokenStorage.swift */,
 				3C336C262C4418EF007B0A47 /* ProfileService.swift */,
 				3C336C282C444A29007B0A47 /* ProfileImageService.swift */,
+				3C03906A2C55641E00DE84DC /* ImagesListService.swift */,
 				3C336C242C44150B007B0A47 /* UIBlockingProgressHUD.swift */,
 			);
 			path = Services;
@@ -140,6 +145,7 @@
 				3C35C3AA2C10E1D5000BA1FE /* UIColor+Extensions.swift */,
 				3C35C3BF2C1B6D45000BA1FE /* UIImage+Extensions.swift */,
 				3C204F9F2C39A94F00404D3C /* URLSession+data.swift */,
+				3C03906C2C56417500DE84DC /* String+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -377,6 +383,7 @@
 				3C35C3AF2C1217E9000BA1FE /* ImagesListView.swift in Sources */,
 				3C336C252C44150B007B0A47 /* UIBlockingProgressHUD.swift in Sources */,
 				3C204F9C2C396D5400404D3C /* OAuth2Service.swift in Sources */,
+				3C03906D2C56417500DE84DC /* String+Extensions.swift in Sources */,
 				3C204FA42C3AFE3D00404D3C /* SplashViewController.swift in Sources */,
 				3C204FA22C39D9DD00404D3C /* OAuth2TokenStorage.swift in Sources */,
 				3C8A64032C0B5CE000FC6E6C /* ImagesListViewController.swift in Sources */,
@@ -398,6 +405,7 @@
 				3C35C3CA2C1F5520000BA1FE /* SingleImageViewController.swift in Sources */,
 				3C35C3C62C1DE5FD000BA1FE /* MainTabBarViewController.swift in Sources */,
 				3C35C3B22C121A81000BA1FE /* AppColorSettings.swift in Sources */,
+				3C03906B2C55641E00DE84DC /* ImagesListService.swift in Sources */,
 				3C6F326A2C34643300CD930F /* WebViewView.swift in Sources */,
 				3C336C312C499C9A007B0A47 /* AlertPresenterProtocol.swift in Sources */,
 				3C6F32642C33235000CD930F /* AuthViewController.swift in Sources */,

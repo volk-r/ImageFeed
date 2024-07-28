@@ -27,7 +27,7 @@ protocol OAuth2ServiceProtocol {
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void)
 }
 
-// MARK: // MARK: ProfileService
+// MARK: ProfileService
 final class OAuth2Service: OAuth2ServiceProtocol {
     // MARK: PROPERTIES
     static let shared = OAuth2Service()

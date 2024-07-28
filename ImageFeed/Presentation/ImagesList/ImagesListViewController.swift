@@ -12,6 +12,8 @@ final class ImagesListViewController: UIViewController {
     
     private lazy var imagesListView = ImagesListView()
     
+    private let imagesListService: ImagesListServiceProtocol = ImagesListService.shared
+    
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     
     private lazy var dateFormatter: DateFormatter = {
@@ -95,6 +97,12 @@ extension ImagesListViewController: UITableViewDelegate {
         let cellHeight = image.size.height * scale
         
         return cellHeight
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == imagesListService.photos.count {
+            imagesListService.fetchPhotosNextPage()
+        }
     }
 }
 
