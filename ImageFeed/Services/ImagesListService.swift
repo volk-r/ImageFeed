@@ -74,8 +74,6 @@ final class ImagesListService: ImagesListServiceProtocol {
 
     // MARK: fetchPhotosNextPage
     func fetchPhotosNextPage() {
-        let nextPage = (lastLoadedPage ?? 0) + 1
-        
         assert(Thread.isMainThread)
         task?.cancel()
         
@@ -83,6 +81,8 @@ final class ImagesListService: ImagesListServiceProtocol {
             print("failed to makePhotosRequest: \(ImagesListServiceError.invalidRequest)", #file, #function, #line)
             return
         }
+        
+        let nextPage = (lastLoadedPage ?? 0) + 1
         
         task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self else { return }
