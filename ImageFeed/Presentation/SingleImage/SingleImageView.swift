@@ -56,12 +56,6 @@ final class SingleImageView: UIView {
         
         setupLayout()
     }
-    init(model: SingleImageModel) {
-        super.init(frame: .zero)
-        backgroundColor = AppColorSettings.backgroundColor
-        
-        setupLayout()
-    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
