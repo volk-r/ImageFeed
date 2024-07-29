@@ -6,12 +6,9 @@
 //
 
 import UIKit
-import Kingfisher
 
 final class SingleImageView: UIView {
     // MARK: PROPERTIES
-    private var singleImageViewModel: SingleImageModel
-    
     private var imageViewBottomConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
     private var imageViewTopConstraint: NSLayoutConstraint!
@@ -26,7 +23,7 @@ final class SingleImageView: UIView {
         return scrollView
     }()
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -53,13 +50,17 @@ final class SingleImageView: UIView {
     }()
     
     // MARK: INIT
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = AppColorSettings.backgroundColor
+        
+        setupLayout()
+    }
     init(model: SingleImageModel) {
-        singleImageViewModel = model
         super.init(frame: .zero)
         backgroundColor = AppColorSettings.backgroundColor
         
         setupLayout()
-        setupContent()
     }
     
     required init?(coder: NSCoder) {
@@ -109,16 +110,6 @@ final class SingleImageView: UIView {
             shareButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             shareButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
         ])
-    }
-    
-    // MARK: - SETUP DATA
-    private func setupContent() {
-        guard let imageUrl = URL(string: singleImageViewModel.image) else {
-            print("failed create image URL from: \(singleImageViewModel.image)", #file, #function, #line)
-            return
-        }
-        
-        imageView.kf.setImage(with: imageUrl)
     }
 }
 
