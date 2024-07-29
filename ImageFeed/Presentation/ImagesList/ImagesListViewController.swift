@@ -68,7 +68,7 @@ extension ImagesListViewController {
                 let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
                     IndexPath(row: i, section: 0)
                 }
-                print(indexPaths)
+
                 imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
             } completion: { _ in }
         }
