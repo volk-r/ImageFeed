@@ -47,6 +47,8 @@ struct UrlsResult: Decodable {
 // MARK: ImagesListServiceError
 enum ImagesListServiceError: Error {
     case invalidRequest
+    case invalidPhotoId
+    case failedChangePhotoLike
 }
 
 // MARK: ImagesListServiceProtocol
@@ -143,6 +145,81 @@ final class ImagesListService: ImagesListServiceProtocol {
         }
         
         var request = URLRequest(url: url)
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
+        
+        return request
+    }
+    
+    // MARK: changeLike
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        task?.cancel()
+        
+        guard let request = makeLikeRequest(photoId: photoId, isLike: isLike) else {
+            print("failed to makeLikeRequest: \(ImagesListServiceError.invalidRequest)", #file, #function, #line)
+            return
+        }
+        
+        task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
+            guard let self else { return }
+            
+            switch result {
+            case .success(let photoResult):
+                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                    let photo = self.photos[index]
+                    let newPhoto = Photo(
+                        id: photo.id,
+                        size: photo.size,
+                        createdAt: photo.createdAt,
+                        welcomeDescription: photo.welcomeDescription,
+                        thumbImageURL: photo.thumbImageURL,
+                        largeImageURL: photo.largeImageURL,
+                        isLiked: !photo.isLiked
+                    )
+                    
+                    DispatchQueue.main.async {
+                        self.photos[index] = newPhoto
+                        self.task = nil
+                        
+                        NotificationCenter.default
+                            .post(
+                                name: ImagesListService.didChangeNotification,
+                                object: self,
+                                userInfo: ["photos": self.photos]
+                            )
+                    }
+                } else {
+                    print("failed to find photo with ID \(photoId)", #file, #function, #line)
+                    completion(.failure(ImagesListServiceError.invalidPhotoId))
+                }
+            case .failure(let error):
+                print("failed to like/dislike photo: \(error.localizedDescription)", #file, #function, #line)
+                completion(.failure(ImagesListServiceError.failedChangePhotoLike))
+            }
+        }
+    }
+    
+    // MARK: makeLikeRequest
+    private func makeLikeRequest(photoId: String, isLike: Bool) -> URLRequest? {
+        guard var urlComponents = URLComponents(string: Constants.defaultBaseURL.absoluteString) else {
+            assertionFailure("failed to create URLComponents")
+            return nil
+        }
+        
+        urlComponents.path = "/photos/\(photoId)/like"
+        
+        guard let url = urlComponents.url else {
+            assertionFailure("failed to create URL from URLComponents")
+            return nil
+        }
+        
+        guard let authToken = OAuth2TokenStorage().token else {
+            assertionFailure("failed to get authToken")
+            return nil
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = isLike ? "POST" : "DELETE"
         request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         
         return request
