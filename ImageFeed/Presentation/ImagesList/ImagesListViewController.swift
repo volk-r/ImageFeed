@@ -9,12 +9,12 @@ import UIKit
 
 final class ImagesListViewController: UIViewController {
     // MARK: PROPERTIES
-    
     private lazy var imagesListView = ImagesListView()
     
     private let imagesListService: ImagesListServiceProtocol = ImagesListService.shared
+    private var imagesListServiceObserver: NSObjectProtocol?
     
-    private let photosName: [String] = Array(0..<20).map{ "\($0)" }
+    private var photos: [Photo] = []
     
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -33,16 +33,52 @@ final class ImagesListViewController: UIViewController {
         imagesListView.tableView.delegate = self
         
         imagesListView.tableView.rowHeight = 200
+        
+        imagesListServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ImagesListService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateTableViewAnimated()
+            }
+        
+        imagesListService.fetchPhotosNextPage()
     }
     
-    // MARK: - SETUP
+    deinit {
+        guard let imagesListServiceObserver else {
+            return
+        }
+        
+        NotificationCenter.default.removeObserver(imagesListServiceObserver)
+    }
+}
+
+extension ImagesListViewController {
+    // MARK: updateTableViewAnimated
+    func updateTableViewAnimated() {
+        let prevPhotoCount = photos.count
+        let newPhotoCount = imagesListService.photos.count
+        photos = imagesListService.photos
+        
+        if prevPhotoCount != newPhotoCount {
+            imagesListView.tableView.performBatchUpdates {
+                let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
+                    IndexPath(row: i, section: 0)
+                }
+                print(indexPaths)
+                imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
+            } completion: { _ in }
+        }
+    }
 }
 
 // MARK: UITableViewDataSource
-
 extension ImagesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        photosName.count
+        photos.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,21 +97,19 @@ extension ImagesListViewController: UITableViewDataSource {
     }
     
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return
-        }
-        
-        let isLiked = indexPath.row % 2 == 0 ? true : false
+        let currentRow = photos[indexPath.row]
         
         let cellData = ImagesListCellModel(
-            image: image,
-            date: dateFormatter.string(from: Date()),
-            isLiked: isLiked
+            imageURL: currentRow.thumbImageURL,
+            date: dateFormatter.string(from: currentRow.createdAt ?? Date()),
+            isLiked: currentRow.isLiked
         )
         
         cell.setupCell(with: cellData)
         cell.imagesListCellDelegate = self
         cell.setIndexPath(indexPath)
+        
+        imagesListView.tableView.reloadRows(at: [indexPath], with: .automatic)
     }
 }
 
@@ -87,10 +121,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        guard let image = UIImage(named: photosName[indexPath.row]) else {
-            return 0
-        }
-        
+        let image = photos[indexPath.row]
         let imageViewWidth = tableView.bounds.width
         let imageWidth = image.size.width
         let scale = imageViewWidth / imageWidth
@@ -110,7 +141,7 @@ extension ImagesListViewController: UITableViewDelegate {
 
 extension ImagesListViewController: ImagesListCellDelegate {
     func openImage(indexPath: IndexPath) {
-        let imageName = photosName[indexPath.row]
+        let imageName = imagesListService.photos[indexPath.row].largeImageURL
         let singleImageVC = SingleImageViewController(model: SingleImageModel(image: imageName))
         singleImageVC.modalPresentationStyle = .fullScreen
         present(singleImageVC, animated: true)

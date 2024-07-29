@@ -77,12 +77,12 @@ final class ImagesListService: ImagesListServiceProtocol {
         assert(Thread.isMainThread)
         task?.cancel()
         
-        guard let request = makePhotosRequest() else {
+        let nextPage = (lastLoadedPage ?? 0) + 1
+        
+        guard let request = makePhotosRequest(pageNumber: nextPage.description) else {
             print("failed to makePhotosRequest: \(ImagesListServiceError.invalidRequest)", #file, #function, #line)
             return
         }
-        
-        let nextPage = (lastLoadedPage ?? 0) + 1
         
         task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self else { return }
@@ -121,7 +121,7 @@ final class ImagesListService: ImagesListServiceProtocol {
     }
     
     // MARK: makePhotosRequest
-    private func makePhotosRequest() -> URLRequest? {
+    private func makePhotosRequest(pageNumber: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: Constants.defaultBaseURL.absoluteString) else {
             assertionFailure("failed to create URLComponents")
             return nil
@@ -129,7 +129,7 @@ final class ImagesListService: ImagesListServiceProtocol {
         
         urlComponents.path = "/photos"
         urlComponents.queryItems = [
-            URLQueryItem(name: "page", value: lastLoadedPage?.description),
+            URLQueryItem(name: "page", value: pageNumber),
         ]
         
         guard let url = urlComponents.url else {

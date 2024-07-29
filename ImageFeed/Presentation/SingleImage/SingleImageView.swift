@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class SingleImageView: UIView {
     // MARK: PROPERTIES
@@ -112,7 +113,12 @@ final class SingleImageView: UIView {
     
     // MARK: - SETUP DATA
     private func setupContent() {
-        imageView.image = UIImage(named: singleImageViewModel.image)
+        guard let imageUrl = URL(string: singleImageViewModel.image) else {
+            print("failed create image URL from: \(singleImageViewModel.image)", #file, #function, #line)
+            return
+        }
+        
+        imageView.kf.setImage(with: imageUrl)
     }
 }
 
