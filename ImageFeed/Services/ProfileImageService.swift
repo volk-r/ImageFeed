@@ -44,6 +44,10 @@ final class ProfileImageService: ProfileImageServiceProtocol {
         
     }
     
+    func clean() {
+        avatarURL = nil
+    }
+    
     // MARK: fetchProfileImageURL
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)

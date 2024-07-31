@@ -79,6 +79,11 @@ final class ImagesListService: ImagesListServiceProtocol {
     private init() {
         
     }
+    
+    func clean() {
+        photos.removeAll()
+        lastLoadedPage = nil
+    }
 
     // MARK: fetchPhotosNextPage
     func fetchPhotosNextPage() {
