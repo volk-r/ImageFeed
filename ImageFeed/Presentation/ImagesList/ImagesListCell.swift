@@ -127,10 +127,8 @@ extension ImagesListCell {
         }
         
         descriptionLabel.text = cellData.date
-        likeButton.imageView?.tintColor = cellData.isLiked
-            ? UIColor(hexString: "F56B6C")
-            : .white
-        likeButton.alpha = cellData.isLiked ? 1 : 0.5
+        
+        setIsLiked(cellData.isLiked)
     }
     
     func setIndexPath(_ indexPath: IndexPath) {
@@ -140,9 +138,22 @@ extension ImagesListCell {
     private func addGesture() {
         let postImageViewTapGesture = UITapGestureRecognizer(target: self, action: #selector(postImageViewOpened))
         postImageView.addGestureRecognizer(postImageViewTapGesture)
+        
+        likeButton.addTarget(self, action: #selector(likeButtonClicked), for: .touchUpInside)
     }
     
     @objc private func postImageViewOpened() {
         imagesListCellDelegate?.openImage(indexPath: indexPathCell)
+    }
+    
+    @objc private func likeButtonClicked() {
+        imagesListCellDelegate?.imageListCellDidTapLike(self)
+    }
+    
+    func setIsLiked(_ isLiked: Bool) {
+        likeButton.imageView?.tintColor = isLiked
+            ? UIColor(hexString: "F56B6C")
+            : .white
+        likeButton.alpha = isLiked ? 1 : 0.5
     }
 }

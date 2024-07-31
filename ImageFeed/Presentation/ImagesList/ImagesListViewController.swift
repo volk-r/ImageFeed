@@ -11,6 +11,8 @@ final class ImagesListViewController: UIViewController {
     // MARK: PROPERTIES
     private lazy var imagesListView = ImagesListView()
     
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
+    
     private let imagesListService: ImagesListServiceProtocol = ImagesListService.shared
     private var imagesListServiceObserver: NSObjectProtocol?
     
@@ -146,4 +148,42 @@ extension ImagesListViewController: ImagesListCellDelegate {
         singleImageVC.modalPresentationStyle = .fullScreen
         present(singleImageVC, animated: true)
     }
+    
+    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+        guard let indexPath = imagesListView.tableView.indexPath(for: cell) else {
+            return
+        }
+        
+        let photo = photos[indexPath.row]
+        
+        UIBlockingProgressHUD.show()
+        imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
+            guard let self else { return }
+            UIBlockingProgressHUD.dismiss()
+            
+            switch result {
+            case .success:
+                self.photos = self.imagesListService.photos
+                cell.setIsLiked(self.photos[indexPath.row].isLiked)
+            case .failure(let error):
+                let message = photo.isLiked ? "dislike" : "like"
+                print("failed to \(message) photo: \(error.localizedDescription)", #file, #function, #line)
+                callAlert(isLiked: photo.isLiked)
+            }
+        }
+    }
+    
+    private func callAlert(isLiked: Bool) {
+        let message = isLiked ? "снять" : "поставить"
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось \(message) лайк",
+            buttonText: "Попробовать позже"
+        ) { [weak self] in
+            guard let self = self else { return }
+        }
+        
+        alertPresenter.callAlert(with: alert)
+    }
+    
 }

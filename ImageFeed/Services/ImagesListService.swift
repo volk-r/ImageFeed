@@ -18,6 +18,11 @@ struct Photo {
     let isLiked: Bool
 }
 
+// MARK: struct LikeResult
+struct LikeResult: Decodable {
+    let photo: PhotoResult
+}
+
 // MARK: struct PhotoResult
 struct PhotoResult: Decodable {
     let id: String
@@ -56,6 +61,7 @@ protocol ImagesListServiceProtocol {
     var lastLoadedPage: Int? { get }
     var photos: [Photo] { get }
     func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
 }
 
 final class ImagesListService: ImagesListServiceProtocol {
@@ -160,11 +166,13 @@ final class ImagesListService: ImagesListServiceProtocol {
             return
         }
         
-        task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
+        task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
             guard let self else { return }
             
             switch result {
             case .success(let photoResult):
+                let isLiked = photoResult.photo.isLiked
+                
                 if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                     let photo = self.photos[index]
                     let newPhoto = Photo(
@@ -174,7 +182,7 @@ final class ImagesListService: ImagesListServiceProtocol {
                         welcomeDescription: photo.welcomeDescription,
                         thumbImageURL: photo.thumbImageURL,
                         largeImageURL: photo.largeImageURL,
-                        isLiked: !photo.isLiked
+                        isLiked: isLiked
                     )
                     
                     DispatchQueue.main.async {
@@ -187,6 +195,8 @@ final class ImagesListService: ImagesListServiceProtocol {
                                 object: self,
                                 userInfo: ["photos": self.photos]
                             )
+                        
+                        completion(.success(()))
                     }
                 } else {
                     print("failed to find photo with ID \(photoId)", #file, #function, #line)
