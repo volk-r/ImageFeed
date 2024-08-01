@@ -30,6 +30,8 @@ final class ProfileViewController: UIViewController {
             }
         updateAvatar()
         
+        setupButton()
+        
         guard let profile = profileService.profile else {
             print("no profile data found", #file, #function, #line)
             return
@@ -47,8 +49,16 @@ final class ProfileViewController: UIViewController {
     }
 }
 
-// MARK: - SETUP
 private extension ProfileViewController {
+    // MARK: SETUP BUTTONS
+    private func setupButton() {
+        profileView.exitButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
+    }
+    
+    @objc private func didTapLogoutButton() {
+        ProfileLogoutService.shared.logout()
+    }
+    
     // MARK: - updateProfileDetails
     private func updateProfileDetails(profile: Profile) {
         let profileData = ProfileModel(

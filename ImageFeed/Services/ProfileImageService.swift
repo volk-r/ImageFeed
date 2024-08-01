@@ -63,7 +63,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
             
             switch result {
             case .success(let userResult):
-                self.avatarURL = userResult.profileImage.small
+                self.avatarURL = userResult.profileImage.large
                 
                 guard let avatarURL = self.avatarURL else {
                     print("failed to get avatarURL", #file, #function, #line)

@@ -65,7 +65,7 @@ final class ProfileView: UIView {
         return label
     }()
     
-    private lazy var exitButton: UIButton = {
+    lazy var exitButton: UIButton = {
         var button = UIButton()
         let image = UIImage(systemName: "ipad.and.arrow.forward")
         button.imageView?.tintColor = UIColor(hexString: "E47370")
@@ -157,6 +157,7 @@ extension ProfileView {
             switch result {
             case .success(let value):
                 profileImageView.image = value.image.resized(to: CGSize(width: 70, height: 70))
+                profileImageView.layer.cornerRadius = 30
             case .failure(let error):
                 print("failed update avatar: \(error.errorCode) \(error.localizedDescription)", #file, #function, #line)
             }
