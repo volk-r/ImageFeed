@@ -116,7 +116,6 @@ extension ImagesListViewController: UITableViewDataSource {
 }
 
 // MARK: UITableViewDelegate
-
 extension ImagesListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -140,13 +139,47 @@ extension ImagesListViewController: UITableViewDelegate {
 }
 
 // MARK: ImagesListCellDelegate
-
 extension ImagesListViewController: ImagesListCellDelegate {
     func openImage(indexPath: IndexPath) {
         let imageName = imagesListService.photos[indexPath.row].largeImageURL
-        let singleImageVC = SingleImageViewController(model: SingleImageModel(image: imageName))
+        let singleImageVC = SingleImageViewController()
         singleImageVC.modalPresentationStyle = .fullScreen
-        present(singleImageVC, animated: true)
+        
+        guard let imageUrl = URL(string: imageName) else {
+            print("failed create image URL from: \(imageName)", #file, #function, #line)
+            return
+        }
+
+        UIBlockingProgressHUD.show()
+        
+        singleImageVC.singleImageView.imageView.kf.setImage(with: imageUrl) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                singleImageVC.singleImageView.imageView.image = imageResult.image
+                present(singleImageVC, animated: true)
+            case .failure:
+                print("failed to load image URL from: \(imageUrl)", #file, #function, #line)
+                callAlert(indexPath: indexPath)
+            }
+        }
+    }
+    
+    private func callAlert(indexPath: IndexPath) {
+        let alert = AlertModel(
+            title: "Что-то пошло не так(",
+            message: "Не удалось загрузить картинку",
+            buttonText: "Попробовать еще раз?",
+            cancelButtonText: "Не надо"
+        ) { [weak self] in
+            guard let self = self else { return }
+            
+            self.openImage(indexPath: indexPath)
+        }
+        
+        alertPresenter.callAlert(with: alert)
     }
     
     func imageListCellDidTapLike(_ cell: ImagesListCell) {
@@ -168,19 +201,19 @@ extension ImagesListViewController: ImagesListCellDelegate {
             case .failure(let error):
                 let message = photo.isLiked ? "dislike" : "like"
                 print("failed to \(message) photo: \(error.localizedDescription)", #file, #function, #line)
-                callAlert(isLiked: photo.isLiked)
+                callLikeAlert(isLiked: photo.isLiked)
             }
         }
     }
     
-    private func callAlert(isLiked: Bool) {
+    private func callLikeAlert(isLiked: Bool) {
         let message = isLiked ? "снять" : "поставить"
         let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: "Не удалось \(message) лайк",
-            buttonText: "Попробовать позже"
-        ) { [weak self] in
-            guard let self = self else { return }
+            buttonText: "Попробовать позже",
+            cancelButtonText: nil
+        ) {
         }
         
         alertPresenter.callAlert(with: alert)

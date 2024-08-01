@@ -22,13 +22,19 @@ final class AlertPresenter: AlertPresenterProtocol {
             message: model.message,
             preferredStyle: .alert)
         
-        let action = UIAlertAction (title: model.buttonText, style: .default) { _ in
+        let action = UIAlertAction(title: model.buttonText, style: .default) { _ in
             if let completion = model.completion {
                 completion()
             }
         }
         
         alert.addAction(action)
+        
+        if let cancelButtonText = model.cancelButtonText {
+            let cancelAction = UIAlertAction(title: cancelButtonText, style: .cancel)
+            alert.addAction(cancelAction)
+        }
+        
         alert.view.accessibilityIdentifier = "alert"
         delegate.present(alert, animated: true, completion: nil)
     }
