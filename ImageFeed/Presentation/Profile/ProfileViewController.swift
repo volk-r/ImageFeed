@@ -12,6 +12,8 @@ final class ProfileViewController: UIViewController {
     private lazy var profileView = ProfileView()
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
+    
     private var profileImageServiceObserver: NSObjectProtocol?
     
     // MARK: - Lifecycle
@@ -55,8 +57,18 @@ private extension ProfileViewController {
         profileView.exitButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
     }
     
+    // MARK: LOGOUT
     @objc private func didTapLogoutButton() {
-        ProfileLogoutService.shared.logout()
+        let alert = AlertModel(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            buttonText: "Да",
+            cancelButtonText: "Нет"
+        ) {
+            ProfileLogoutService.shared.logout()
+        }
+        
+        alertPresenter.callAlert(with: alert)
     }
     
     // MARK: - updateProfileDetails

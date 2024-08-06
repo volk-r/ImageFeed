@@ -112,6 +112,8 @@ extension ImagesListCell {
             return
         }
         
+        postImageView.contentMode = .center
+        
         postImageView.kf.indicatorType = .activity
         postImageView.kf.setImage(
             with: imageUrl,
@@ -120,6 +122,7 @@ extension ImagesListCell {
             guard let self = self else { return }
             switch result {
             case .success(let value):
+                postImageView.contentMode = .scaleAspectFill
                 postImageView.image = value.image
             case .failure(let error):
                 print("failed upload photo: \(error.errorCode) \(error.localizedDescription)", #file, #function, #line)
