@@ -36,6 +36,9 @@ final class ImagesListViewController: UIViewController {
         
         imagesListView.tableView.rowHeight = 200
         
+        // TODO:
+//        NotificationCenter.default.addObserver(<#T##observer: Any##Any#>, selector: <#T##Selector#>, name: <#T##NSNotification.Name?#>, object: <#T##Any?#>)
+        
         imagesListServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ImagesListService.didChangeNotification,
@@ -66,11 +69,11 @@ extension ImagesListViewController {
         photos = imagesListService.photos
         
         if prevPhotoCount != newPhotoCount {
+            let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
+                IndexPath(row: i, section: 0)
+            }
+            
             imagesListView.tableView.performBatchUpdates {
-                let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
-
                 imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
             } completion: { _ in }
         }

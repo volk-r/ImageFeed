@@ -8,7 +8,7 @@
 import Foundation
 
 extension String {
-    var convertISOStringToDate: Date? { formatISOStringToDate( self ) }
+    var convertISOStringToDate: Date? { formatISOStringToDate(self) }
     
     private func formatISOStringToDate(_ dateString: String?) -> Date? {
         guard let dateString = dateString else { return nil }
