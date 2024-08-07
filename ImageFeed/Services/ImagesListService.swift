@@ -48,6 +48,10 @@ final class ImagesListService: ImagesListServiceProtocol {
 
     // MARK: fetchPhotosNextPage
     func fetchPhotosNextPage() {
+        guard task == nil else {
+            return
+        }
+        
         if !Thread.isMainThread {
             DispatchQueue.main.async { [weak self] in
                 self?.fetchPhotosNextPage()
@@ -67,6 +71,11 @@ final class ImagesListService: ImagesListServiceProtocol {
         task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self else { return }
             
+            defer {
+                self.task = nil
+                self.lastLoadedPage = nextPage
+            }
+            
             switch result {
             case .success(let photoResult):
                 DispatchQueue.main.async {
@@ -83,9 +92,6 @@ final class ImagesListService: ImagesListServiceProtocol {
                             )
                         )
                     }
-                    
-                    self.task = nil
-                    self.lastLoadedPage = nextPage
                     
                     NotificationCenter.default
                         .post(
