@@ -49,6 +49,7 @@ final class ImagesListService: ImagesListServiceProtocol {
     // MARK: fetchPhotosNextPage
     func fetchPhotosNextPage() {
         guard task == nil else {
+            print("cancel fetchPhotosNextPage, request in process", #file, #function, #line)
             return
         }
         
