@@ -28,7 +28,7 @@ final class ProfileView: UIView {
         return stackView
     }()
     
-    private lazy var profileImageView: UIImageView = {
+    lazy var profileImageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -38,7 +38,7 @@ final class ProfileView: UIView {
         return imageView
     }()
     
-    private lazy var nameLabel: UILabel = {
+    lazy var nameLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 23, weight: .regular)
         label.textColor = AppColorSettings.ypWhite
@@ -47,7 +47,7 @@ final class ProfileView: UIView {
         return label
     }()
     
-    private lazy var nickLabel: UILabel = {
+    lazy var nickLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = AppColorSettings.ypGrey
@@ -56,7 +56,7 @@ final class ProfileView: UIView {
         return label
     }()
     
-    private lazy var statusLabel: UILabel = {
+    lazy var statusLabel: UILabel = {
         var label = UILabel()
         label.font = .systemFont(ofSize: 13, weight: .regular)
         label.textColor = AppColorSettings.ypWhite
@@ -149,8 +149,7 @@ extension ProfileView {
         profileImageView.kf.setImage(
             with: url,
             options: [
-                .processor(processor),
-                .transition(.flipFromLeft(0.3))
+                .processor(processor)
             ]
         ) { [weak self] result in
             guard let self = self else { return }

@@ -12,6 +12,9 @@ final class ProfileViewController: UIViewController {
     private lazy var profileView = ProfileView()
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     
+    private let customGradient = CustomGradient()
+    private var animationLayers = Set<CALayer>()
+    
     private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     private var profileImageServiceObserver: NSObjectProtocol?
@@ -20,6 +23,8 @@ final class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view = profileView
+        
+        addGradients()
         
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
@@ -40,6 +45,7 @@ final class ProfileViewController: UIViewController {
         }
         
         updateProfileDetails(profile: profile)
+        removeGradients()
     }
     
     deinit {
@@ -103,5 +109,44 @@ private extension ProfileViewController {
         else { return }
         
         profileView.setupAvatar(from: url)
+    }
+    
+    
+    func addGradients() {
+        let avatarGradient = customGradient.getGradient(
+            size: CGSize(
+                width: 70,
+                height: 70
+            ),
+            cornerRadius: profileView.profileImageView.layer.cornerRadius)
+        profileView.profileImageView.layer.addSublayer(avatarGradient)
+        animationLayers.insert(avatarGradient)
+        
+        let nameLabelGradient = customGradient.getGradient(size: CGSize(
+            width: 300,
+            height: 30
+        ))
+        profileView.nameLabel.layer.addSublayer(nameLabelGradient)
+        animationLayers.insert(nameLabelGradient)
+        
+        let statusLabelGradient = customGradient.getGradient(size: CGSize(
+            width: 250,
+            height: 18
+        ))
+        profileView.statusLabel.layer.addSublayer(statusLabelGradient)
+        animationLayers.insert(statusLabelGradient)
+        
+        let nickLabelGradient = customGradient.getGradient(size: CGSize(
+            width: 280,
+            height: 18
+        ))
+        profileView.nickLabel.layer.addSublayer(nickLabelGradient)
+        animationLayers.insert(nickLabelGradient)
+    }
+    
+    func removeGradients() {
+        for gradient in self.animationLayers {
+            gradient.removeFromSuperlayer()
+        }
     }
 }
