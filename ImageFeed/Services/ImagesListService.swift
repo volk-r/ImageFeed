@@ -31,6 +31,7 @@ final class ImagesListService: ImagesListServiceProtocol {
     
     private let urlSession = URLSession.shared
     private var task: Task<(), Never>?
+    private var likeTask: Task<(), Never>?
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
@@ -41,6 +42,8 @@ final class ImagesListService: ImagesListServiceProtocol {
     func clean() {
         photos.removeAll()
         lastLoadedPage = nil
+        task = nil
+        likeTask = nil
     }
 
     // MARK: fetchPhotosNextPage
@@ -134,14 +137,14 @@ final class ImagesListService: ImagesListServiceProtocol {
             return
         }
         
-        task?.cancel()
+        likeTask?.cancel()
         
         guard let request = makeLikeRequest(photoId: photoId, isLike: isLike) else {
             print("failed to makeLikeRequest: \(ImagesListServiceError.invalidRequest)", #file, #function, #line)
             return
         }
         
-        task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+        likeTask = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
             guard let self else { return }
             
             switch result {
@@ -162,7 +165,7 @@ final class ImagesListService: ImagesListServiceProtocol {
                     
                     DispatchQueue.main.async {
                         self.photos[index] = newPhoto
-                        self.task = nil
+                        self.likeTask = nil
                         
                         NotificationCenter.default
                             .post(
