@@ -45,7 +45,13 @@ final class ImagesListService: ImagesListServiceProtocol {
 
     // MARK: fetchPhotosNextPage
     func fetchPhotosNextPage() {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchPhotosNextPage()
+            }
+            return
+        }
+        
         task?.cancel()
         
         let nextPage = (lastLoadedPage ?? 0) + 1
@@ -121,7 +127,13 @@ final class ImagesListService: ImagesListServiceProtocol {
     
     // MARK: changeLike
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.changeLike(photoId: photoId, isLike: isLike, completion)
+            }
+            return
+        }
+        
         task?.cancel()
         
         guard let request = makeLikeRequest(photoId: photoId, isLike: isLike) else {

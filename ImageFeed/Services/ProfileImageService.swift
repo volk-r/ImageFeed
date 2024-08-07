@@ -35,7 +35,13 @@ final class ProfileImageService: ProfileImageServiceProtocol {
     
     // MARK: fetchProfileImageURL
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchProfileImageURL(username: username, completion)
+            }
+            return
+        }
+        
         task?.cancel()
         
         guard let request = makeBaseProfilePublicDataRequest(for: username) else {

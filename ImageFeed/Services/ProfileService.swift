@@ -38,7 +38,13 @@ final class ProfileService: ProfileServiceProtocol {
     
     // MARK: fetchProfile
     func fetchProfile(_ token: String, completion: @escaping (Result<Profile, Error>) -> Void) {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchProfile(token, completion: completion)
+            }
+            return
+        }
+        
         task?.cancel()
         
         guard let request = makeBaseProfileDataRequest(authToken: token) else {
