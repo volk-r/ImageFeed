@@ -66,7 +66,7 @@ final class ImagesListService: ImagesListServiceProtocol {
                             Photo(
                                 id: $0.id,
                                 size: CGSize(width: $0.width, height: $0.height),
-                                createdAt: $0.createdAt?.convertISOStringToDate,
+                                createdAt: DateFormatterService.shared.formatISOStringToDate($0.createdAt),
                                 welcomeDescription: $0.welcomeDescription,
                                 thumbImageURL: $0.urls.thumb,
                                 largeImageURL: $0.urls.full,

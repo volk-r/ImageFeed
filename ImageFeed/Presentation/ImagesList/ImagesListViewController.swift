@@ -17,13 +17,6 @@ final class ImagesListViewController: UIViewController {
     private var imagesListServiceObserver: NSObjectProtocol?
     
     private var photos: [Photo] = []
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
 
     // MARK: - Lifecycle
     
@@ -37,6 +30,7 @@ final class ImagesListViewController: UIViewController {
         imagesListView.tableView.rowHeight = 200
         
         // TODO:
+        
 //        NotificationCenter.default.addObserver(<#T##observer: Any##Any#>, selector: <#T##Selector#>, name: <#T##NSNotification.Name?#>, object: <#T##Any?#>)
         
         imagesListServiceObserver = NotificationCenter.default
@@ -106,7 +100,7 @@ extension ImagesListViewController: UITableViewDataSource {
         
         let cellData = ImagesListCellModel(
             imageURL: currentRow.thumbImageURL,
-            date: dateFormatter.string(from: currentRow.createdAt ?? Date()),
+            date: DateFormatterService.shared.stringFromDate(currentRow.createdAt) ?? "",
             isLiked: currentRow.isLiked
         )
         
