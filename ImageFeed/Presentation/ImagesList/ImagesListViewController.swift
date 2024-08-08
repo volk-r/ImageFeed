@@ -14,16 +14,8 @@ final class ImagesListViewController: UIViewController {
     private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     private let imagesListService: ImagesListServiceProtocol = ImagesListService.shared
-    private var imagesListServiceObserver: NSObjectProtocol?
     
     private var photos: [Photo] = []
-    
-    private lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .none
-        return formatter
-    }()
 
     // MARK: - Lifecycle
     
@@ -36,41 +28,30 @@ final class ImagesListViewController: UIViewController {
         
         imagesListView.tableView.rowHeight = 200
         
-        imagesListServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ImagesListService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateTableViewAnimated()
-            }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateTableViewAnimated),
+            name: ImagesListService.didChangeNotification,
+            object: nil
+        )
         
         imagesListService.fetchPhotosNextPage()
-    }
-    
-    deinit {
-        guard let imagesListServiceObserver else {
-            return
-        }
-        
-        NotificationCenter.default.removeObserver(imagesListServiceObserver)
     }
 }
 
 extension ImagesListViewController {
     // MARK: updateTableViewAnimated
-    func updateTableViewAnimated() {
+    @objc func updateTableViewAnimated() {
         let prevPhotoCount = photos.count
         let newPhotoCount = imagesListService.photos.count
         photos = imagesListService.photos
         
         if prevPhotoCount != newPhotoCount {
+            let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
+                IndexPath(row: i, section: 0)
+            }
+            
             imagesListView.tableView.performBatchUpdates {
-                let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
-                    IndexPath(row: i, section: 0)
-                }
-
                 imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
             } completion: { _ in }
         }
@@ -103,7 +84,7 @@ extension ImagesListViewController: UITableViewDataSource {
         
         let cellData = ImagesListCellModel(
             imageURL: currentRow.thumbImageURL,
-            date: dateFormatter.string(from: currentRow.createdAt ?? Date()),
+            date: DateFormatterService.shared.stringFromDate(currentRow.createdAt) ?? "",
             isLiked: currentRow.isLiked
         )
         

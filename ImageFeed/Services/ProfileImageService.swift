@@ -7,21 +7,6 @@
 
 import Foundation
 
-// MARK: struct UserResult
-struct UserResult: Codable {
-    let profileImage: ImageResult
-        
-    private enum CodingKeys: String, CodingKey {
-        case profileImage = "profile_image"
-    }
-}
-
-struct ImageResult: Codable {
-    let small: String
-    let medium: String
-    let large: String
-}
-
 // MARK: ProfileImageServiceProtocol
 protocol ProfileImageServiceProtocol {
     var avatarURL: String? { get }
@@ -50,7 +35,13 @@ final class ProfileImageService: ProfileImageServiceProtocol {
     
     // MARK: fetchProfileImageURL
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchProfileImageURL(username: username, completion)
+            }
+            return
+        }
+        
         task?.cancel()
         
         guard let request = makeBaseProfilePublicDataRequest(for: username) else {

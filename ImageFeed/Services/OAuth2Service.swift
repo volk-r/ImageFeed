@@ -7,15 +7,6 @@
 
 import Foundation
 
-// MARK: OAuthTokenResponseBody
-struct OAuthTokenResponseBody: Decodable {
-    let accessToken: String
-    
-    private enum CodingKeys: String, CodingKey {
-        case accessToken = "access_token"
-    }
-}
-
 // MARK: AuthServiceError
 enum AuthServiceError: Error {
     case invalidRequest
@@ -42,7 +33,12 @@ final class OAuth2Service: OAuth2ServiceProtocol {
     
     // MARK: fetchOAuthToken
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchOAuthToken(code: code, completion: completion)
+            }
+            return
+        }
         
         if lastCode == code {
             completion(.failure(AuthServiceError.invalidCode))

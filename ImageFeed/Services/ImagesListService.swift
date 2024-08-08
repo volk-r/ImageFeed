@@ -7,48 +7,6 @@
 
 import Foundation
 
-// MARK: struct Photo
-struct Photo {
-    let id: String
-    let size: CGSize
-    let createdAt: Date?
-    let welcomeDescription: String?
-    let thumbImageURL: String
-    let largeImageURL: String
-    let isLiked: Bool
-}
-
-// MARK: struct LikeResult
-struct LikeResult: Decodable {
-    let photo: PhotoResult
-}
-
-// MARK: struct PhotoResult
-struct PhotoResult: Decodable {
-    let id: String
-    let width: Int
-    let height: Int
-    let createdAt: String?
-    let welcomeDescription: String?
-    let urls: UrlsResult
-    let isLiked: Bool
-    
-    private enum CodingKeys: String, CodingKey {
-        case id
-        case width
-        case height
-        case createdAt = "created_at"
-        case welcomeDescription = "description"
-        case urls
-        case isLiked = "liked_by_user"
-    }
-}
-
-struct UrlsResult: Decodable {
-    let thumb: String
-    let full: String
-}
-
 // MARK: ImagesListServiceError
 enum ImagesListServiceError: Error {
     case invalidRequest
@@ -73,6 +31,7 @@ final class ImagesListService: ImagesListServiceProtocol {
     
     private let urlSession = URLSession.shared
     private var task: Task<(), Never>?
+    private var likeTask: Task<(), Never>?
     
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
@@ -83,11 +42,24 @@ final class ImagesListService: ImagesListServiceProtocol {
     func clean() {
         photos.removeAll()
         lastLoadedPage = nil
+        task = nil
+        likeTask = nil
     }
 
     // MARK: fetchPhotosNextPage
     func fetchPhotosNextPage() {
-        assert(Thread.isMainThread)
+        guard task == nil else {
+            print("cancel fetchPhotosNextPage, request in process", #file, #function, #line)
+            return
+        }
+        
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchPhotosNextPage()
+            }
+            return
+        }
+        
         task?.cancel()
         
         let nextPage = (lastLoadedPage ?? 0) + 1
@@ -100,6 +72,11 @@ final class ImagesListService: ImagesListServiceProtocol {
         task = urlSession.objectTask(for: request) { [weak self] (result: Result<[PhotoResult], Error>) in
             guard let self else { return }
             
+            defer {
+                self.task = nil
+                self.lastLoadedPage = nextPage
+            }
+            
             switch result {
             case .success(let photoResult):
                 DispatchQueue.main.async {
@@ -108,7 +85,7 @@ final class ImagesListService: ImagesListServiceProtocol {
                             Photo(
                                 id: $0.id,
                                 size: CGSize(width: $0.width, height: $0.height),
-                                createdAt: $0.createdAt?.convertISOStringToDate,
+                                createdAt: DateFormatterService.shared.formatISOStringToDate($0.createdAt),
                                 welcomeDescription: $0.welcomeDescription,
                                 thumbImageURL: $0.urls.thumb,
                                 largeImageURL: $0.urls.full,
@@ -116,9 +93,6 @@ final class ImagesListService: ImagesListServiceProtocol {
                             )
                         )
                     }
-                    
-                    self.task = nil
-                    self.lastLoadedPage = nextPage
                     
                     NotificationCenter.default
                         .post(
@@ -163,15 +137,21 @@ final class ImagesListService: ImagesListServiceProtocol {
     
     // MARK: changeLike
     func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void) {
-        assert(Thread.isMainThread)
-        task?.cancel()
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.changeLike(photoId: photoId, isLike: isLike, completion)
+            }
+            return
+        }
+        
+        likeTask?.cancel()
         
         guard let request = makeLikeRequest(photoId: photoId, isLike: isLike) else {
             print("failed to makeLikeRequest: \(ImagesListServiceError.invalidRequest)", #file, #function, #line)
             return
         }
         
-        task = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
+        likeTask = urlSession.objectTask(for: request) { [weak self] (result: Result<LikeResult, Error>) in
             guard let self else { return }
             
             switch result {
@@ -192,7 +172,7 @@ final class ImagesListService: ImagesListServiceProtocol {
                     
                     DispatchQueue.main.async {
                         self.photos[index] = newPhoto
-                        self.task = nil
+                        self.likeTask = nil
                         
                         NotificationCenter.default
                             .post(
