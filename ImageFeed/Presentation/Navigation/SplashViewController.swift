@@ -72,7 +72,8 @@ extension SplashViewController {
         let alert = AlertModel(
             title: "Что-то пошло не так(",
             message: "Не удалось загрузить профиль",
-            buttonText: "Попробовать еще раз"
+            buttonText: "Попробовать еще раз",
+            cancelButtonText: nil
         ) { [weak self] in
             guard let self = self else { return }
             
