@@ -14,22 +14,18 @@ final class ProfileViewController: UIViewController {
     
     private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
-    private var profileImageServiceObserver: NSObjectProtocol?
-    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view = profileView
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateAvatar),
+            name: ProfileImageService.didChangeNotification,
+            object: nil
+        )
+        
         updateAvatar()
         
         setupButton()
@@ -40,14 +36,6 @@ final class ProfileViewController: UIViewController {
         }
         
         updateProfileDetails(profile: profile)
-    }
-    
-    deinit {
-        guard let profileImageServiceObserver else {
-            return
-        }
-        
-        NotificationCenter.default.removeObserver(profileImageServiceObserver)
     }
 }
 
@@ -96,7 +84,7 @@ private extension ProfileViewController {
     }
     
     // MARK: - updateAvatar
-    private func updateAvatar() {
+    @objc private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
