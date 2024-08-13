@@ -6,41 +6,39 @@
 //
 
 import UIKit
+import Kingfisher
+import ProgressHUD
 
 final class SingleImageViewController: UIViewController {
     // MARK: - PROPERTIES
-    private var singleImageView: SingleImageView?
+    lazy var singleImageView = SingleImageView()
+    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     // MARK: - Lifecycle
-    init(model: SingleImageModel) {
-        super.init(nibName: nil, bundle: nil)
-        
-        singleImageView = SingleImageView(model: model)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         view = singleImageView
-        singleImageView?.scrollView.delegate = self
-        
+
+        singleImageView.scrollView.delegate = self
+
         setupButton()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 
+// MARK: SETUP BUTTONS
 extension SingleImageViewController {
-    // MARK: SETUP BUTTONS
     private func setupButton() {
-        singleImageView?.backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        singleImageView.backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         
-        singleImageView?.shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
+        singleImageView.shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
     }
     
-    @objc func didTapBackButton() {
+    @objc private func didTapBackButton() {
         dismiss(animated: true)
     }
     
-    @objc func didTapShareButton() {
-        guard let shareContent: [Any] = singleImageView?.getContentForSharing() else { return }
+    @objc private func didTapShareButton() {
+        let shareContent: [Any] = singleImageView.getContentForSharing()
         
         let activityController = UIActivityViewController(
             activityItems: shareContent,
@@ -52,13 +50,12 @@ extension SingleImageViewController {
 }
 
 // MARK: UIScrollViewDelegate
-
 extension SingleImageViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        singleImageView?.getImageForSingleImageView()
+        singleImageView.getImageForSingleImageView()
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        singleImageView?.updateConstraintsForView(view)
+        singleImageView.updateConstraintsForView(view)
     }
 }

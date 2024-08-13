@@ -7,21 +7,6 @@
 
 import Foundation
 
-// MARK: struct UserResult
-struct UserResult: Codable {
-    let profileImage: ImageResult
-        
-    private enum CodingKeys: String, CodingKey {
-        case profileImage = "profile_image"
-    }
-}
-
-struct ImageResult: Codable {
-    let small: String
-    let medium: String
-    let large: String
-}
-
 // MARK: ProfileImageServiceProtocol
 protocol ProfileImageServiceProtocol {
     var avatarURL: String? { get }
@@ -44,9 +29,19 @@ final class ProfileImageService: ProfileImageServiceProtocol {
         
     }
     
+    func clean() {
+        avatarURL = nil
+    }
+    
     // MARK: fetchProfileImageURL
     func fetchProfileImageURL(username: String, _ completion: @escaping (Result<String, Error>) -> Void) {
-        assert(Thread.isMainThread)
+        if !Thread.isMainThread {
+            DispatchQueue.main.async { [weak self] in
+                self?.fetchProfileImageURL(username: username, completion)
+            }
+            return
+        }
+        
         task?.cancel()
         
         guard let request = makeBaseProfilePublicDataRequest(for: username) else {
@@ -59,7 +54,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
             
             switch result {
             case .success(let userResult):
-                self.avatarURL = userResult.profileImage.small
+                self.avatarURL = userResult.profileImage.large
                 
                 guard let avatarURL = self.avatarURL else {
                     print("failed to get avatarURL", #file, #function, #line)
@@ -84,7 +79,7 @@ final class ProfileImageService: ProfileImageServiceProtocol {
     
     // MARK: makeBaseProfilePublicDataRequest
     private func makeBaseProfilePublicDataRequest(for username: String) -> URLRequest? {
-        let profileBaseURL =  URL(string: "users/\(username)", relativeTo: Constants.defaultBaseURL)
+        let profileBaseURL = URL(string: "users/\(username)", relativeTo: Constants.defaultBaseURL)
         
         guard let url = profileBaseURL else {
             assertionFailure("failed to create profileBaseURL")

@@ -9,8 +9,6 @@ import UIKit
 
 final class SingleImageView: UIView {
     // MARK: PROPERTIES
-    private var singleImageViewModel: SingleImageModel
-    
     private var imageViewBottomConstraint: NSLayoutConstraint!
     private var imageViewLeadingConstraint: NSLayoutConstraint!
     private var imageViewTopConstraint: NSLayoutConstraint!
@@ -25,7 +23,7 @@ final class SingleImageView: UIView {
         return scrollView
     }()
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         var imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
@@ -52,13 +50,11 @@ final class SingleImageView: UIView {
     }()
     
     // MARK: INIT
-    init(model: SingleImageModel) {
-        singleImageViewModel = model
-        super.init(frame: .zero)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         backgroundColor = AppColorSettings.backgroundColor
         
         setupLayout()
-        setupContent()
     }
     
     required init?(coder: NSCoder) {
@@ -108,11 +104,6 @@ final class SingleImageView: UIView {
             shareButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             shareButton.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -16),
         ])
-    }
-    
-    // MARK: - SETUP DATA
-    private func setupContent() {
-        imageView.image = UIImage(named: singleImageViewModel.image)
     }
 }
 
