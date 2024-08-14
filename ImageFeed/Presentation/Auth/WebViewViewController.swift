@@ -8,8 +8,10 @@
 import UIKit
 import WebKit
 
-final class WebViewViewController: UIViewController, WKUIDelegate {
+final class WebViewViewController: UIViewController, WKUIDelegate, WebViewViewControllerProtocol {
     // MARK: - PROPERTIES
+    var presenter: WebViewPresenterProtocol?
+    
     weak var delegate: WebViewViewControllerDelegate?
     
     private lazy var webViewView = WebViewView()
@@ -20,13 +22,17 @@ final class WebViewViewController: UIViewController, WKUIDelegate {
     override func loadView() {
         webViewView.webView.uiDelegate = self
         webViewView.webView.navigationDelegate = self
+        
         view = webViewView
         view.accessibilityIdentifier = "ShowWebView"
+        
+        presenter = WebViewPresenter()
+        presenter?.view = self
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadAuthView()
+        presenter?.viewDidLoad()
         
         configureBackButton()
         
@@ -35,7 +41,7 @@ final class WebViewViewController: UIViewController, WKUIDelegate {
              options: [],
              changeHandler: { [weak self] _, _ in
                  guard let self = self else { return }
-                 self.updateProgress()
+                 self.presenter?.didUpdateProgressValue(webViewView.webView.estimatedProgress)
              })
     }
     
@@ -54,25 +60,7 @@ final class WebViewViewController: UIViewController, WKUIDelegate {
 
 // MARK: - FUNCTIONS
 extension WebViewViewController {
-    private func loadAuthView() {
-        guard var urlComponents = URLComponents(string: Constants.unsplashAuthorizeURLString) else {
-            print("failed created URLComponents")
-            return
-        }
-        
-        urlComponents.queryItems = [
-            URLQueryItem(name: "client_id", value: Constants.accessKey),
-            URLQueryItem(name: "redirect_uri", value: Constants.redirectURI),
-            URLQueryItem(name: "response_type", value: "code"),
-            URLQueryItem(name: "scope", value: Constants.accessScope)
-        ]
-        
-        guard let url = urlComponents.url else {
-            print("failed created url from components")
-            return
-        }
-        
-        let request = URLRequest(url: url)
+    func load(request: URLRequest) {
         webViewView.webView.load(request)
     }
     
@@ -95,9 +83,12 @@ extension WebViewViewController {
     }
     
     // MARK: - UPDATE progressView
-    private func updateProgress() {
-        webViewView.progressView.progress = Float(webViewView.webView.estimatedProgress)
-        webViewView.progressView.isHidden = fabs(webViewView.webView.estimatedProgress - 1.0) <= 0.0001
+    func setProgressValue(_ newValue: Float) {
+        webViewView.progressView.progress = newValue
+    }
+
+    func setProgressHidden(_ isHidden: Bool) {
+        webViewView.progressView.isHidden = isHidden
     }
 }
 
@@ -117,16 +108,10 @@ extension WebViewViewController: WKNavigationDelegate {
     }
     
     private func code(from navigationAction: WKNavigationAction) -> String? {
-        if
-            let url = navigationAction.request.url,
-            let urlComponents = URLComponents(string: url.absoluteString),
-            urlComponents.path == "/oauth/authorize/native",
-            let items = urlComponents.queryItems,
-            let codeItem = items.first(where: { $0.name == "code" })
-        {
-            return codeItem.value
-        } else {
-            return nil
+        if let url = navigationAction.request.url {
+            return presenter?.code(from: url)
         }
+        
+        return nil
     }
 }
