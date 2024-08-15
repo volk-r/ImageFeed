@@ -36,6 +36,8 @@ extension AuthViewController {
     @objc private func openLoginPage() {
         let webViewVC = WebViewViewController()
         webViewVC.delegate = self
+        let authHelper = AuthHelper()
+        webViewVC.presenter = WebViewPresenter(authHelper: authHelper)
         navigationController?.pushViewController(webViewVC, animated: true)
     }
 }

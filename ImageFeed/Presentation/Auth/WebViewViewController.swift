@@ -26,8 +26,6 @@ final class WebViewViewController: UIViewController, WKUIDelegate, WebViewViewCo
         view = webViewView
         view.accessibilityIdentifier = "ShowWebView"
         
-        let authHelper = AuthHelper()
-        presenter = WebViewPresenter(authHelper: authHelper)
         presenter?.view = self
     }
     
