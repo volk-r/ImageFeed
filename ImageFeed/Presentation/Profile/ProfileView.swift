@@ -149,8 +149,7 @@ extension ProfileView {
         profileImageView.kf.setImage(
             with: url,
             options: [
-                .processor(processor),
-                .transition(.flipFromLeft(0.3))
+                .processor(processor)
             ]
         ) { [weak self] result in
             guard let self = self else { return }
