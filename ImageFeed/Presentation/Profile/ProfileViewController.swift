@@ -11,7 +11,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     // MARK: PROPERTIES
     private lazy var profileView = ProfileView()
     
-    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
+    lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     var presenter: ProfileViewPresenterProtocol?
     
@@ -25,6 +25,9 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         
         setupButton()
     }
+}
+
+extension ProfileViewController {
     // MARK: setAvatarByURL
     func setAvatarByURL(_ url: URL) {
         profileView.setupAvatar(from: url)
@@ -48,6 +51,6 @@ private extension ProfileViewController {
     
     // MARK: LOGOUT
     @objc private func didTapLogoutButton() {
-        presenter?.didTapLogoutButton(alertPresenter: alertPresenter)
+        presenter?.didTapLogoutButton()
     }
 }

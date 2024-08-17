@@ -59,7 +59,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     }
     
     // MARK: - didTapLogoutButton
-    func didTapLogoutButton(alertPresenter: AlertPresenterProtocol) {
+    func didTapLogoutButton() {
         let alert = AlertModel(
             title: "Пока, пока!",
             message: "Уверены, что хотите выйти?",
@@ -69,7 +69,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
             ProfileLogoutService.shared.logout()
         }
         
-        alertPresenter.callAlert(with: alert)
+        view?.alertPresenter.callAlert(with: alert)
     }
     
     // MARK: - setupMockUser
