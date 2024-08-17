@@ -20,16 +20,21 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     private var photos: [Photo] = []
 
     // MARK: - Lifecycle
+    override func loadView() {
+        super.loadView()
+        view = imagesListView
+        
+        presenter = ImagesListViewPresenter(view: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view = imagesListView
         
         imagesListView.tableView.dataSource = self
         imagesListView.tableView.delegate = self
         
         imagesListView.tableView.rowHeight = 200
         
-        presenter = ImagesListViewPresenter(view: self)
         presenter?.viewDidLoad()
     }
 }
