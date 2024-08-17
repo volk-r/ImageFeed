@@ -16,11 +16,15 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     var presenter: ProfileViewPresenterProtocol?
     
     // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
         view = profileView
         
         presenter = ProfileViewPresenter(view: self)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
         presenter?.viewDidLoad()
         
         setupButton()

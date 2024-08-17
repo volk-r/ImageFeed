@@ -15,7 +15,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     private let profileService: ProfileServiceProtocol = ProfileService.shared
     
     init(view: ProfileViewControllerProtocol?) {
-      self.view = view
+        self.view = view
     }
     
     // MARK: - viewDidLoad

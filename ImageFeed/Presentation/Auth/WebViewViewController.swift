@@ -20,6 +20,7 @@ final class WebViewViewController: UIViewController, WKUIDelegate, WebViewViewCo
     
     // MARK: - Lifecycle
     override func loadView() {
+        super.loadView()
         webViewView.webView.uiDelegate = self
         webViewView.webView.navigationDelegate = self
         
