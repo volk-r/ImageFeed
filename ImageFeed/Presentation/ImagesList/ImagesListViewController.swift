@@ -172,14 +172,13 @@ extension ImagesListViewController: ImagesListCellDelegate {
         imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
             guard let self else { return }
             UIBlockingProgressHUD.dismiss()
+            completion()
             
             switch result {
             case .success:
-                completion()
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(self.photos[indexPath.row].isLiked)
             case .failure(let error):
-                completion()
                 let message = photo.isLiked ? "dislike" : "like"
                 print("failed to \(message) photo: \(error.localizedDescription)", #file, #function, #line)
                 presenter?.callLikeAlert(isLiked: photo.isLiked)
