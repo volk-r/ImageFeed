@@ -9,5 +9,5 @@ import Foundation
 
 protocol ImagesListCellDelegate: AnyObject {
     func openImage(indexPath: IndexPath)
-    func imageListCellDidTapLike(_ cell: ImagesListCell)
+    func imageListCellDidTapLike(_ cell: ImagesListCell, completion: @escaping () -> Void)
 }

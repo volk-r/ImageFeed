@@ -72,6 +72,8 @@ final class ProfileView: UIView {
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
+        button.accessibilityIdentifier = "ExitButton"
+        
         return button
     }()
     

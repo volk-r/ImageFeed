@@ -161,7 +161,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
         }
     }
     
-    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+    func imageListCellDidTapLike(_ cell: ImagesListCell, completion: @escaping () -> Void) {
         guard let indexPath = imagesListView.tableView.indexPath(for: cell) else {
             return
         }
@@ -175,9 +175,11 @@ extension ImagesListViewController: ImagesListCellDelegate {
             
             switch result {
             case .success:
+                completion()
                 self.photos = self.imagesListService.photos
                 cell.setIsLiked(self.photos[indexPath.row].isLiked)
             case .failure(let error):
+                completion()
                 let message = photo.isLiked ? "dislike" : "like"
                 print("failed to \(message) photo: \(error.localizedDescription)", #file, #function, #line)
                 presenter?.callLikeAlert(isLiked: photo.isLiked)
