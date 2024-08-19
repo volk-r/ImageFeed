@@ -138,7 +138,8 @@ extension ProfileView {
         statusLabel.text = profileData.status
     }
     
-    func setupMockAvatar(with image: UIImage?) {
+    func setupMockAvatar() {
+        let image = UIImage(named: "mockUser")
         profileImageView.image = image?.resized(to: CGSize(width: 70, height: 70))
     }
     

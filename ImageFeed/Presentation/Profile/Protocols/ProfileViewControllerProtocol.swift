@@ -12,5 +12,5 @@ protocol ProfileViewControllerProtocol: AnyObject {
     var alertPresenter: AlertPresenterProtocol { get }
     func setAvatarByURL(_ url: URL)
     func setProfileData(with profileData: ProfileModel)
-    func setMockUser(with data: ProfileModel, image: UIImage?)
+    func setMockUser(with data: ProfileModel)
 }

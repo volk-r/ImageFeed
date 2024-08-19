@@ -23,7 +23,7 @@ final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
         setProfileDataCalled = true
     }
     
-    func setMockUser(with data: ImageFeed.ProfileModel, image: UIImage?) {
+    func setMockUser(with data: ImageFeed.ProfileModel) {
         
     }
 }

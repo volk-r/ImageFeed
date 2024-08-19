@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import UIKit
 
 final class ProfileViewPresenter: ProfileViewPresenterProtocol {
     // MARK: - PROPERTIES
@@ -79,8 +78,7 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
             nick: "@ekaterina_nov",
             status: "Hello, world!"
         )
-        let image = UIImage(named: "mockUser")
         
-        view?.setMockUser(with: profileData, image: image)
+        view?.setMockUser(with: profileData)
     }
 }

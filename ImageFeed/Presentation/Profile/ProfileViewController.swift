@@ -41,9 +41,9 @@ extension ProfileViewController {
         profileView.setupProfile(with: profileData)
     }
     // MARK: setMockUser
-    func setMockUser(with data: ProfileModel, image: UIImage?) {
+    func setMockUser(with data: ProfileModel) {
         profileView.setupProfile(with: data)
-        profileView.setupMockAvatar(with: image)
+        profileView.setupMockAvatar()
     }
 }
 

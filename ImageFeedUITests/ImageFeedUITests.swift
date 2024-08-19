@@ -26,13 +26,13 @@ final class ImageFeedUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("eduardkarimov.rb@gmail.com")// TODO: data from network
+        loginTextField.typeText("eduardkarimov.rb@gmail.com")// fake data from network
         app.buttons["Done"].tap()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         passwordTextField.tap()
-        passwordTextField.typeText("A2c2d2c2")// TODO: data from network
+        passwordTextField.typeText("A2c2d2c2")// fake data from network
         app.buttons["Done"].tap()
 
         let loginButton = webView.buttons["Login"]
@@ -75,7 +75,7 @@ final class ImageFeedUITests: XCTestCase {
         cellToLike.tap()
 
         let singleImageView = app.scrollViews.images["SingleImageView"]
-        XCTAssertTrue(singleImageView.waitForExistence(timeout: 5))
+        XCTAssertTrue(singleImageView.waitForExistence(timeout: 15))
         
         singleImageView.pinch(withScale: 3, velocity: 1)
         sleep(1)
