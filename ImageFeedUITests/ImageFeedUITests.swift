@@ -32,6 +32,7 @@ final class ImageFeedUITests: XCTestCase {
         let passwordTextField = webView.descendants(matching: .secureTextField).element
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         passwordTextField.tap()
+        sleep(1)
         passwordTextField.typeText("A2c2d2c2")// fake data from network
         app.buttons["Done"].tap()
 
@@ -56,7 +57,7 @@ final class ImageFeedUITests: XCTestCase {
     func testFeed() throws {
         let tablesQuery = app.tables
         
-        let cell = tablesQuery.children(matching: .cell).element(boundBy: 1)
+        let cell = tablesQuery.descendants(matching: .cell).element(boundBy: 1)
         XCTAssertTrue(cell.waitForExistence(timeout: 5))
         cell.swipeUp(velocity: .slow)
         
@@ -64,12 +65,13 @@ final class ImageFeedUITests: XCTestCase {
         
         app.swipeDown()
         
-        let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 0)
+        let cellToLike = tablesQuery.descendants(matching: .cell).element(boundBy: 0)
         XCTAssertTrue(cellToLike.waitForExistence(timeout: 5))
         
-        cellToLike.buttons["LikeButton"].tap()
+        let likeButtonIdentifier = "LikeButton"
+        cellToLike.buttons[likeButtonIdentifier].tap()
         sleep(3)
-        cellToLike.buttons["LikeButton"].tap()
+        cellToLike.buttons[likeButtonIdentifier].tap()
         sleep(3)
         
         cellToLike.tap()
