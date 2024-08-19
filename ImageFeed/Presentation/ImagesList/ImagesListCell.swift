@@ -43,6 +43,8 @@ final class ImagesListCell: UITableViewCell {
         button.alpha = 0.5
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
+        button.accessibilityIdentifier = "LikeButton"
+        
         return button
     }()
     
@@ -150,7 +152,29 @@ extension ImagesListCell {
     }
     
     @objc private func likeButtonClicked() {
-        imagesListCellDelegate?.imageListCellDidTapLike(self)
+        UIView.animateKeyframes(withDuration: 1.5, delay: 0) {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.3) {
+                self.likeButton.transform = .init(scaleX: 1.5, y: 1.5)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.3) {
+                self.likeButton.transform = .identity
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.3) {
+                self.likeButton.transform = .init(scaleX: 1.2, y: 1.2)
+            }
+            
+            UIView.addKeyframe(withRelativeStartTime: 0.75, relativeDuration: 0.3) {
+                self.likeButton.transform = .identity
+            }
+        }
+        
+        imagesListCellDelegate?.imageListCellDidTapLike(self) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, execute: {
+                self?.likeButton.layer.removeAllAnimations()
+            })
+        }
     }
     
     func setIsLiked(_ isLiked: Bool) {

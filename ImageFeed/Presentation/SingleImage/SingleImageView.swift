@@ -28,6 +28,8 @@ final class SingleImageView: UIView {
         imageView.contentMode = .scaleAspectFill
         imageView.isUserInteractionEnabled = true
         
+        imageView.accessibilityIdentifier = "SingleImageView"
+        
         return imageView
     }()
     
@@ -37,6 +39,8 @@ final class SingleImageView: UIView {
         button.imageView?.tintColor = .white
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
+        
+        button.accessibilityIdentifier = "BackButton"
         
         return button
     }()

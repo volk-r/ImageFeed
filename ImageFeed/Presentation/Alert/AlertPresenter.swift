@@ -31,11 +31,12 @@ final class AlertPresenter: AlertPresenterProtocol {
         alert.addAction(action)
         
         if let cancelButtonText = model.cancelButtonText {
-            let cancelAction = UIAlertAction(title: cancelButtonText, style: .cancel)
+            let cancelAction = UIAlertAction(title: cancelButtonText, style: .default)
             alert.addAction(cancelAction)
+            alert.preferredAction = cancelAction
         }
         
-        alert.view.accessibilityIdentifier = "alert"
+        alert.view.accessibilityIdentifier = "Alert"
         delegate.present(alert, animated: true, completion: nil)
     }
 }

@@ -72,6 +72,8 @@ final class ProfileView: UIView {
         button.setImage(image, for: .normal)
         button.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 24), forImageIn: .normal)
         
+        button.accessibilityIdentifier = "ExitButton"
+        
         return button
     }()
     
@@ -136,7 +138,8 @@ extension ProfileView {
         statusLabel.text = profileData.status
     }
     
-    func setupMockAvatar(with image: UIImage?) {
+    func setupMockAvatar() {
+        let image = UIImage(named: "mockUser")
         profileImageView.image = image?.resized(to: CGSize(width: 70, height: 70))
     }
     
@@ -150,7 +153,7 @@ extension ProfileView {
             with: url,
             options: [
                 .processor(processor),
-                .transition(.flipFromLeft(0.3))
+                .fromMemoryCacheOrRefresh
             ]
         ) { [weak self] result in
             guard let self = self else { return }

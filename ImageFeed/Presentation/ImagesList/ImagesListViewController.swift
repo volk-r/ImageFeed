@@ -7,54 +7,67 @@
 
 import UIKit
 
-final class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController, ImagesListViewControllerProtocol {
     // MARK: PROPERTIES
     private lazy var imagesListView = ImagesListView()
     
-    private lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
+    var presenter: ImagesListViewPresenterProtocol?
+    
+    lazy var alertPresenter: AlertPresenterProtocol = AlertPresenter(delegate: self)
     
     private let imagesListService: ImagesListServiceProtocol = ImagesListService.shared
     
     private var photos: [Photo] = []
 
     // MARK: - Lifecycle
+    override func loadView() {
+        super.loadView()
+        view = imagesListView
+        
+        presenter = ImagesListViewPresenter(view: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view = imagesListView
         
         imagesListView.tableView.dataSource = self
         imagesListView.tableView.delegate = self
         
         imagesListView.tableView.rowHeight = 200
         
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(updateTableViewAnimated),
-            name: ImagesListService.didChangeNotification,
-            object: nil
-        )
-        
-        imagesListService.fetchPhotosNextPage()
+        presenter?.viewDidLoad()
     }
 }
 
 extension ImagesListViewController {
     // MARK: updateTableViewAnimated
-    @objc func updateTableViewAnimated() {
+    func updateTableViewAnimated() {
         let prevPhotoCount = photos.count
         let newPhotoCount = imagesListService.photos.count
-        photos = imagesListService.photos
         
-        if prevPhotoCount != newPhotoCount {
-            let indexPaths = (prevPhotoCount ..< newPhotoCount).map { i in
-                IndexPath(row: i, section: 0)
-            }
-            
-            imagesListView.tableView.performBatchUpdates {
-                imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
-            } completion: { _ in }
+        presenter?.updatePhotoList(prevPhotoCount: prevPhotoCount, newPhotoCount: newPhotoCount)
+    }
+    
+    // MARK: performPhotoUpdates
+    func performPhotoUpdates() {
+        photos = imagesListService.photos
+    }
+    
+    // MARK: performBatchUpdates
+    func performBatchUpdates(indexPaths: [IndexPath]) {
+        imagesListView.tableView.performBatchUpdates {
+            imagesListView.tableView.insertRows(at: indexPaths, with: .automatic)
         }
+    }
+    
+    // MARK: performBatchUpdates
+    func fetchPhotosNextPage() {
+        imagesListService.fetchPhotosNextPage()
+    }
+    
+    // MARK: openImageByIndexPath
+    func openImageByIndexPath(_ indexPath: IndexPath) {
+        openImage(indexPath: indexPath)
     }
 }
 
@@ -114,7 +127,7 @@ extension ImagesListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if indexPath.row + 1 == imagesListService.photos.count {
-            imagesListService.fetchPhotosNextPage()
+            fetchPhotosNextPage()
         }
     }
 }
@@ -143,27 +156,12 @@ extension ImagesListViewController: ImagesListCellDelegate {
                 present(singleImageVC, animated: true)
             case .failure:
                 print("failed to load image URL from: \(imageUrl)", #file, #function, #line)
-                callAlert(indexPath: indexPath)
+                presenter?.callAlert(indexPath: indexPath)
             }
         }
     }
     
-    private func callAlert(indexPath: IndexPath) {
-        let alert = AlertModel(
-            title: "Что-то пошло не так(",
-            message: "Не удалось загрузить картинку",
-            buttonText: "Попробовать еще раз?",
-            cancelButtonText: "Не надо"
-        ) { [weak self] in
-            guard let self = self else { return }
-            
-            self.openImage(indexPath: indexPath)
-        }
-        
-        alertPresenter.callAlert(with: alert)
-    }
-    
-    func imageListCellDidTapLike(_ cell: ImagesListCell) {
+    func imageListCellDidTapLike(_ cell: ImagesListCell, completion: @escaping () -> Void) {
         guard let indexPath = imagesListView.tableView.indexPath(for: cell) else {
             return
         }
@@ -174,6 +172,7 @@ extension ImagesListViewController: ImagesListCellDelegate {
         imagesListService.changeLike(photoId: photo.id, isLike: !photo.isLiked) { [weak self] result in
             guard let self else { return }
             UIBlockingProgressHUD.dismiss()
+            completion()
             
             switch result {
             case .success:
@@ -182,22 +181,8 @@ extension ImagesListViewController: ImagesListCellDelegate {
             case .failure(let error):
                 let message = photo.isLiked ? "dislike" : "like"
                 print("failed to \(message) photo: \(error.localizedDescription)", #file, #function, #line)
-                callLikeAlert(isLiked: photo.isLiked)
+                presenter?.callLikeAlert(isLiked: photo.isLiked)
             }
         }
     }
-    
-    private func callLikeAlert(isLiked: Bool) {
-        let message = isLiked ? "снять" : "поставить"
-        let alert = AlertModel(
-            title: "Что-то пошло не так(",
-            message: "Не удалось \(message) лайк",
-            buttonText: "Попробовать позже",
-            cancelButtonText: nil
-        ) {
-        }
-        
-        alertPresenter.callAlert(with: alert)
-    }
-    
 }

@@ -15,6 +15,8 @@ final class WebViewView: UIView {
         let webView = WKWebView(frame: .zero, configuration: webConfiguration)
         webView.backgroundColor = .white
         
+        webView.accessibilityIdentifier = "UnsplashWebView"
+        
         return webView
     }()
     
